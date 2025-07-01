@@ -142,6 +142,8 @@ Thumbs.db
 logs/
 uploads/
 downloads/
+extracode/
+__pycache__/
 *.log
 
 # Temporary files
