@@ -1,0 +1,758 @@
+2025-06-28 15:53:40 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:11 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:11 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Taxpayer']").
+2025-06-28 15:54:11 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:11 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Delhi']").
+2025-06-28 15:54:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:17 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='South West Delhi']").
+2025-06-28 15:54:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:17 - gst_automation - INFO - Successfully sent text to ('id', 'bnm').
+2025-06-28 15:54:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:17 - gst_automation - INFO - Successfully sent text to ('id', 'pan_card').
+2025-06-28 15:54:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:17 - gst_automation - INFO - Successfully sent text to ('id', 'email').
+2025-06-28 15:54:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:17 - gst_automation - INFO - Successfully sent text to ('id', 'mobile').
+2025-06-28 15:54:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:17 - gst_automation - INFO - Solving captcha via TrueCaptcha API...
+2025-06-28 15:54:17 - gst_automation - INFO - Found captcha image element with ID 'imgCaptcha'.
+2025-06-28 15:54:19 - gst_automation - INFO - CAPTCHA solved by API: 672627
+2025-06-28 15:54:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:19 - gst_automation - INFO - Successfully sent text to ('id', 'captcha').
+2025-06-28 15:54:19 - gst_automation - INFO - CAPTCHA text entered successfully.
+2025-06-28 15:54:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:19 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button').
+2025-06-28 15:54:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:19 - gst_automation - INFO - Polling for mobile_otp from OTP server (timeout: 120s)...
+2025-06-28 15:54:34 - gst_automation - INFO - OTP '103815' received for type 'mobile_otp'!
+2025-06-28 15:54:34 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:34 - gst_automation - INFO - Successfully sent text to ('id', 'mobile_otp').
+2025-06-28 15:54:34 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:34 - gst_automation - INFO - Polling for email_otp from OTP server (timeout: 120s)...
+2025-06-28 15:54:58 - gst_automation - INFO - OTP '626321' received for type 'email_otp'!
+2025-06-28 15:54:58 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:58 - gst_automation - INFO - Successfully sent text to ('id', 'email-otp').
+2025-06-28 15:54:58 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:54:58 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/form/div/div/button').
+2025-06-28 15:55:03 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:55:04 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/div[2]/div/a').
+2025-06-28 15:55:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:55:04 - gst_automation - INFO - Polling for trn from OTP server (timeout: 120s)...
+2025-06-28 15:55:25 - gst_automation - INFO - OTP '072500181364TRN' received for type 'trn'!
+2025-06-28 15:55:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:55:25 - gst_automation - INFO - Successfully sent text to ('id', 'trnno').
+2025-06-28 15:55:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:55:25 - gst_automation - INFO - Solving captcha via TrueCaptcha API...
+2025-06-28 15:55:25 - gst_automation - INFO - Found visible CAPTCHA image with ID 'imgCaptcha'.
+2025-06-28 15:55:27 - gst_automation - INFO - CAPTCHA solved: 443554
+2025-06-28 15:55:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:55:27 - gst_automation - INFO - Successfully sent text to ('id', 'captchatrn').
+2025-06-28 15:55:27 - gst_automation - INFO - CAPTCHA entered successfully into input with ID 'captchatrn'.
+2025-06-28 15:55:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:55:27 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button').
+2025-06-28 15:55:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:55:27 - gst_automation - INFO - Polling for mobile_otp from OTP server (timeout: 120s)...
+2025-06-28 15:55:51 - gst_automation - INFO - OTP '320339' received for type 'mobile_otp'!
+2025-06-28 15:55:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:55:51 - gst_automation - INFO - Successfully sent text to ('id', 'mobile_otp').
+2025-06-28 15:55:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:55:51 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/form/div/div/button').
+2025-06-28 15:55:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:55:56 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[1]/div/div[3]/div[2]/div/div/table/tbody/tr/td[6]/button').
+2025-06-28 15:56:02 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:02 - gst_automation - INFO - Successfully sent text to ('id', 'tnm').
+2025-06-28 15:56:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:14 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:15 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Others']").
+2025-06-28 15:56:48 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:48 - gst_automation - INFO - Successfully sent text to ('id', 'tnm').
+2025-06-28 15:56:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:51 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Others']").
+2025-06-28 15:56:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:51 - gst_automation - INFO - Successfully sent text to ('id', 'bd_ConstBuss_oth').
+2025-06-28 15:56:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:51 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Voluntary Basis']").
+2025-06-28 15:56:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:51 - gst_automation - INFO - Successfully sent text to ('id', 'bd_cmbz').
+2025-06-28 15:56:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:52 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Others (Please specify)']").
+2025-06-28 15:56:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:52 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[1]/select/option[16]').
+2025-06-28 15:56:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:52 - gst_automation - INFO - Successfully sent text to ('id', 'bd_othrReg').
+2025-06-28 15:56:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:52 - gst_automation - INFO - Successfully sent text to ('id', 'exno').
+2025-06-28 15:56:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:52 - gst_automation - INFO - Successfully sent text to ('id', 'exdt').
+2025-06-28 15:56:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:52 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[5]/button[1]').
+2025-06-28 15:56:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:52 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Registration Certificate']").
+2025-06-28 15:56:54 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:56:55 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div/div/button[2]').
+2025-06-28 15:56:57 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:57:27 - gst_automation - ERROR - Element ('id', 'fnm') not visible within 30s.
+2025-06-28 15:57:30 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:58:14 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:58:14 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Others (Please specify)']").
+2025-06-28 15:58:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:58:33 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Others (Please specify)']").
+2025-06-28 15:58:49 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:58:49 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[1]/select/option[16]').
+2025-06-28 15:58:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:58:50 - gst_automation - INFO - Successfully sent text to ('id', 'bd_othrReg').
+2025-06-28 15:58:54 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:58:54 - gst_automation - INFO - Successfully sent text to ('id', 'exno').
+2025-06-28 15:58:55 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:58:55 - gst_automation - INFO - Successfully sent text to ('id', 'exdt').
+2025-06-28 15:58:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:58:56 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[5]/button[1]').
+2025-06-28 15:59:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:05 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Registration Certificate']").
+2025-06-28 15:59:10 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:10 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div/div/button[2]').
+2025-06-28 15:59:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:16 - gst_automation - INFO - Successfully sent text to ('id', 'fnm').
+2025-06-28 15:59:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:16 - gst_automation - INFO - Successfully sent text to ('id', 'pd_mname').
+2025-06-28 15:59:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:16 - gst_automation - INFO - Successfully sent text to ('id', 'pd_lname').
+2025-06-28 15:59:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:16 - gst_automation - INFO - Successfully sent text to ('id', 'ffname').
+2025-06-28 15:59:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:16 - gst_automation - INFO - Successfully sent text to ('id', 'pd_fmname').
+2025-06-28 15:59:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:16 - gst_automation - INFO - Successfully sent text to ('id', 'pd_flname').
+2025-06-28 15:59:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:16 - gst_automation - INFO - Successfully sent text to ('id', 'dob').
+2025-06-28 15:59:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:16 - gst_automation - INFO - Successfully sent text to ('id', 'mbno').
+2025-06-28 15:59:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:16 - gst_automation - INFO - Successfully sent text to ('id', 'pd_email').
+2025-06-28 15:59:18 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:19 - gst_automation - INFO - Successfully clicked ('css selector', 'div.tbl-format:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > fieldset:nth-child(1) > label:nth-child(3)').
+2025-06-28 15:59:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:19 - gst_automation - INFO - Successfully sent text to ('id', 'dg').
+2025-06-28 15:59:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:19 - gst_automation - INFO - Successfully sent text to ('id', 'din').
+2025-06-28 15:59:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:19 - gst_automation - INFO - Successfully sent text to ('id', 'pan').
+2025-06-28 15:59:24 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:24 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-28 15:59:24 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 15:59:54 - gst_automation - ERROR - Element ('xpath', "//*[text()='474001']") not clickable within 30s.
+2025-06-28 16:00:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:00:19 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-28 16:00:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:00:19 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='474001']").
+2025-06-28 16:00:21 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:00:21 - gst_automation - INFO - Successfully clicked ('id', 'confirm-mapquery-btn1').
+2025-06-28 16:00:21 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:00:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:01:06 - gst_automation - ERROR - Element ('id', 'confirm-mapquery-btn1') not clickable within 30s.
+2025-06-28 16:01:08 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:01:38 - gst_automation - ERROR - Element ('id', 'confirm-mapquery-btn1') not clickable within 30s.
+2025-06-28 16:02:01 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:02:01 - gst_automation - INFO - Successfully sent text to ('id', 'pd_bdnum').
+2025-06-28 16:02:08 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:02:08 - gst_automation - INFO - Successfully sent text to ('id', 'pd_upload').
+2025-06-28 16:02:08 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:02:09 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[3]').
+2025-06-28 16:02:21 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:02:51 - gst_automation - ERROR - Element ('id', 'pd_upload') not visible within 30s.
+2025-06-28 16:03:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:38 - gst_automation - INFO - Successfully sent text to ('id', 'pd_upload').
+2025-06-28 16:03:42 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:43 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[3]').
+2025-06-28 16:03:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:50 - gst_automation - INFO - Successfully sent text to ('id', 'fnm').
+2025-06-28 16:03:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:50 - gst_automation - INFO - Successfully sent text to ('id', 'as_mname').
+2025-06-28 16:03:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:50 - gst_automation - INFO - Successfully sent text to ('id', 'as_lname').
+2025-06-28 16:03:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:50 - gst_automation - INFO - Successfully sent text to ('id', 'ffname').
+2025-06-28 16:03:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:50 - gst_automation - INFO - Successfully sent text to ('id', 'as_fmname').
+2025-06-28 16:03:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:50 - gst_automation - INFO - Successfully sent text to ('id', 'as_flname').
+2025-06-28 16:03:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:50 - gst_automation - INFO - Successfully sent text to ('id', 'dob').
+2025-06-28 16:03:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:50 - gst_automation - INFO - Successfully sent text to ('id', 'mbno').
+2025-06-28 16:03:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:50 - gst_automation - INFO - Successfully sent text to ('id', 'em').
+2025-06-28 16:03:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:53 - gst_automation - INFO - Successfully clicked ('css selector', 'div.tbl-format:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > fieldset:nth-child(1) > label:nth-child(3)').
+2025-06-28 16:03:53 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:53 - gst_automation - INFO - Successfully sent text to ('id', 'dg').
+2025-06-28 16:03:53 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:53 - gst_automation - INFO - Successfully sent text to ('id', 'din').
+2025-06-28 16:03:53 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:03:53 - gst_automation - INFO - Successfully sent text to ('id', 'pan').
+2025-06-28 16:04:11 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:04:12 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-28 16:04:12 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:04:12 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='474001']").
+2025-06-28 16:04:12 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:04:19 - gst_automation - INFO - Successfully clicked ('id', 'confirm-mapquery-btn2').
+2025-06-28 16:04:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:04:19 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-28 16:04:24 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:04:24 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/fieldset[2]/div/div[2]/div/fieldset/div/select/option[2]').
+2025-06-28 16:04:26 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:04:26 - gst_automation - INFO - Successfully sent text to ('id', 'as_upload_sign').
+2025-06-28 16:04:26 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:04:56 - gst_automation - ERROR - Element ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[3]') not clickable within 30s.
+2025-06-28 16:05:13 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:05:43 - gst_automation - ERROR - Element ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/fieldset[2]/div/div[2]/div/fieldset/div/select/option[2]') not clickable within 30s.
+2025-06-28 16:07:21 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:07:35 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/fieldset[2]/div/div[2]/div/fieldset/div/select/option[2]').
+2025-06-28 16:07:46 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:07:47 - gst_automation - INFO - Successfully sent text to ('id', 'as_upload_sign').
+2025-06-28 16:07:53 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:07:53 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]').
+2025-06-28 16:10:00 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:10:00 - gst_automation - INFO - Successfully sent text to ('id', 'as_upload_sign').
+2025-06-28 16:10:00 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:10:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:10:20 - gst_automation - INFO - Successfully sent text to ('id', 'as_upload_sign').
+2025-06-28 16:10:34 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:10:34 - gst_automation - INFO - Successfully sent text to ('id', 'as_upload_sign').
+2025-06-28 16:11:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:11:17 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]').
+2025-06-28 16:17:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:17:56 - gst_automation - INFO - Successfully sent text to ('id', 'as_upload_sign').
+2025-06-28 16:18:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:17 - gst_automation - INFO - Successfully sent text to ('id', 'fnm').
+2025-06-28 16:18:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:17 - gst_automation - INFO - Successfully sent text to ('id', 'as_mname').
+2025-06-28 16:18:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:17 - gst_automation - INFO - Successfully sent text to ('id', 'as_lname').
+2025-06-28 16:18:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:17 - gst_automation - INFO - Successfully sent text to ('id', 'ffname').
+2025-06-28 16:18:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:17 - gst_automation - INFO - Successfully sent text to ('id', 'as_fmname').
+2025-06-28 16:18:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:17 - gst_automation - INFO - Successfully sent text to ('id', 'as_flname').
+2025-06-28 16:18:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:17 - gst_automation - INFO - Successfully sent text to ('id', 'dob').
+2025-06-28 16:18:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:17 - gst_automation - INFO - Successfully sent text to ('id', 'mbno').
+2025-06-28 16:18:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:17 - gst_automation - INFO - Successfully sent text to ('id', 'em').
+2025-06-28 16:18:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:19 - gst_automation - INFO - Successfully clicked ('css selector', 'div.tbl-format:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > fieldset:nth-child(1) > label:nth-child(3)').
+2025-06-28 16:18:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:19 - gst_automation - INFO - Successfully sent text to ('id', 'dg').
+2025-06-28 16:18:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:19 - gst_automation - INFO - Successfully sent text to ('id', 'din').
+2025-06-28 16:18:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:19 - gst_automation - INFO - Successfully sent text to ('id', 'pan').
+2025-06-28 16:18:23 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:23 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-28 16:18:23 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:24 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='474001']").
+2025-06-28 16:18:24 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:26 - gst_automation - INFO - Successfully clicked ('id', 'confirm-mapquery-btn2').
+2025-06-28 16:18:26 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:26 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-28 16:18:29 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:29 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/fieldset[2]/div/div[2]/div/fieldset/div/select/option[2]').
+2025-06-28 16:18:35 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:35 - gst_automation - INFO - Successfully sent text to ('id', 'as_upload_sign').
+2025-06-28 16:18:54 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:18:55 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]').
+2025-06-28 16:20:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:04 - gst_automation - INFO - Successfully sent text to ('id', 'fnm').
+2025-06-28 16:20:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:04 - gst_automation - INFO - Successfully sent text to ('id', 'as_mname').
+2025-06-28 16:20:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:04 - gst_automation - INFO - Successfully sent text to ('id', 'as_lname').
+2025-06-28 16:20:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:04 - gst_automation - INFO - Successfully sent text to ('id', 'ffname').
+2025-06-28 16:20:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:04 - gst_automation - INFO - Successfully sent text to ('id', 'as_fmname').
+2025-06-28 16:20:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:04 - gst_automation - INFO - Successfully sent text to ('id', 'as_flname').
+2025-06-28 16:20:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:04 - gst_automation - INFO - Successfully sent text to ('id', 'dob').
+2025-06-28 16:20:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:04 - gst_automation - INFO - Successfully sent text to ('id', 'mbno').
+2025-06-28 16:20:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:04 - gst_automation - INFO - Successfully sent text to ('id', 'em').
+2025-06-28 16:20:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:06 - gst_automation - INFO - Successfully clicked ('css selector', 'div.tbl-format:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > fieldset:nth-child(1) > label:nth-child(3)').
+2025-06-28 16:20:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:06 - gst_automation - INFO - Successfully sent text to ('id', 'dg').
+2025-06-28 16:20:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:06 - gst_automation - INFO - Successfully sent text to ('id', 'din').
+2025-06-28 16:20:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:06 - gst_automation - INFO - Successfully sent text to ('id', 'pan').
+2025-06-28 16:20:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:25 - gst_automation - INFO - Successfully sent text to ('id', 'fnm').
+2025-06-28 16:20:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:25 - gst_automation - INFO - Successfully sent text to ('id', 'as_mname').
+2025-06-28 16:20:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:25 - gst_automation - INFO - Successfully sent text to ('id', 'as_lname').
+2025-06-28 16:20:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:25 - gst_automation - INFO - Successfully sent text to ('id', 'ffname').
+2025-06-28 16:20:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:25 - gst_automation - INFO - Successfully sent text to ('id', 'as_fmname').
+2025-06-28 16:20:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:25 - gst_automation - INFO - Successfully sent text to ('id', 'as_flname').
+2025-06-28 16:20:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:25 - gst_automation - INFO - Successfully sent text to ('id', 'dob').
+2025-06-28 16:20:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:25 - gst_automation - INFO - Successfully sent text to ('id', 'mbno').
+2025-06-28 16:20:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:25 - gst_automation - INFO - Successfully sent text to ('id', 'em').
+2025-06-28 16:20:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:27 - gst_automation - INFO - Successfully clicked ('css selector', 'div.tbl-format:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > fieldset:nth-child(1) > label:nth-child(3)').
+2025-06-28 16:20:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:27 - gst_automation - INFO - Successfully sent text to ('id', 'dg').
+2025-06-28 16:20:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:27 - gst_automation - INFO - Successfully sent text to ('id', 'din').
+2025-06-28 16:20:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:27 - gst_automation - INFO - Successfully sent text to ('id', 'pan').
+2025-06-28 16:20:28 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:29 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-28 16:20:29 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:29 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='474001']").
+2025-06-28 16:20:29 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:35 - gst_automation - INFO - Successfully clicked ('id', 'confirm-mapquery-btn2').
+2025-06-28 16:20:35 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:20:35 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-28 16:20:35 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:21:05 - gst_automation - ERROR - Element ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/fieldset[2]/div/div[2]/div/fieldset/div/select/option[2]') not clickable within 30s.
+2025-06-28 16:21:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:21:16 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]').
+2025-06-28 16:21:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:21:59 - gst_automation - INFO - Successfully sent text to ('id', 'fnm').
+2025-06-28 16:21:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:21:59 - gst_automation - INFO - Successfully sent text to ('id', 'as_mname').
+2025-06-28 16:21:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:21:59 - gst_automation - INFO - Successfully sent text to ('id', 'as_lname').
+2025-06-28 16:21:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:21:59 - gst_automation - INFO - Successfully sent text to ('id', 'ffname').
+2025-06-28 16:21:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:21:59 - gst_automation - INFO - Successfully sent text to ('id', 'as_fmname').
+2025-06-28 16:21:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:21:59 - gst_automation - INFO - Successfully sent text to ('id', 'as_flname').
+2025-06-28 16:21:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:21:59 - gst_automation - INFO - Successfully sent text to ('id', 'dob').
+2025-06-28 16:21:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:21:59 - gst_automation - INFO - Successfully sent text to ('id', 'mbno').
+2025-06-28 16:21:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:21:59 - gst_automation - INFO - Successfully sent text to ('id', 'em').
+2025-06-28 16:22:01 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:22:01 - gst_automation - INFO - Successfully clicked ('css selector', 'div.tbl-format:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > fieldset:nth-child(1) > label:nth-child(3)').
+2025-06-28 16:22:01 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:22:01 - gst_automation - INFO - Successfully sent text to ('id', 'dg').
+2025-06-28 16:22:01 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:22:01 - gst_automation - INFO - Successfully sent text to ('id', 'din').
+2025-06-28 16:22:01 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:22:01 - gst_automation - INFO - Successfully sent text to ('id', 'pan').
+2025-06-28 16:22:03 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:22:04 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-28 16:22:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:22:04 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='474001']").
+2025-06-28 16:22:04 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:22:06 - gst_automation - INFO - Successfully clicked ('id', 'confirm-mapquery-btn2').
+2025-06-28 16:22:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:22:06 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-28 16:22:14 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:22:44 - gst_automation - ERROR - Element ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/fieldset[2]/div/div[2]/div/fieldset/div/select/option[2]') not clickable within 30s.
+2025-06-28 16:23:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:31 - gst_automation - INFO - Successfully sent text to ('id', 'fnm').
+2025-06-28 16:23:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:31 - gst_automation - INFO - Successfully sent text to ('id', 'as_mname').
+2025-06-28 16:23:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:31 - gst_automation - INFO - Successfully sent text to ('id', 'as_lname').
+2025-06-28 16:23:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:31 - gst_automation - INFO - Successfully sent text to ('id', 'ffname').
+2025-06-28 16:23:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:31 - gst_automation - INFO - Successfully sent text to ('id', 'as_fmname').
+2025-06-28 16:23:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:31 - gst_automation - INFO - Successfully sent text to ('id', 'as_flname').
+2025-06-28 16:23:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:31 - gst_automation - INFO - Successfully sent text to ('id', 'dob').
+2025-06-28 16:23:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:31 - gst_automation - INFO - Successfully sent text to ('id', 'mbno').
+2025-06-28 16:23:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:31 - gst_automation - INFO - Successfully sent text to ('id', 'em').
+2025-06-28 16:23:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:33 - gst_automation - INFO - Successfully clicked ('css selector', 'div.tbl-format:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > fieldset:nth-child(1) > label:nth-child(3)').
+2025-06-28 16:23:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:33 - gst_automation - INFO - Successfully sent text to ('id', 'dg').
+2025-06-28 16:23:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:33 - gst_automation - INFO - Successfully sent text to ('id', 'din').
+2025-06-28 16:23:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:33 - gst_automation - INFO - Successfully sent text to ('id', 'pan').
+2025-06-28 16:23:34 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:36 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-28 16:23:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:36 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='474001']").
+2025-06-28 16:23:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:46 - gst_automation - INFO - Successfully clicked ('id', 'confirm-mapquery-btn2').
+2025-06-28 16:23:46 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:46 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-28 16:23:58 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:23:58 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]').
+2025-06-28 16:24:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:24:16 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/fieldset[2]/div/div[2]/div/fieldset/div/select/option[2]').
+2025-06-28 16:31:46 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:31:46 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Taxpayer']").
+2025-06-28 16:31:46 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:31:46 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Delhi']").
+2025-06-28 16:31:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:31:51 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='South West Delhi']").
+2025-06-28 16:31:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:31:51 - gst_automation - INFO - Successfully sent text to ('id', 'bnm').
+2025-06-28 16:31:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:31:51 - gst_automation - INFO - Successfully sent text to ('id', 'pan_card').
+2025-06-28 16:31:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:31:51 - gst_automation - INFO - Successfully sent text to ('id', 'email').
+2025-06-28 16:31:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:31:52 - gst_automation - INFO - Successfully sent text to ('id', 'mobile').
+2025-06-28 16:31:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:31:52 - gst_automation - INFO - Solving captcha via TrueCaptcha API...
+2025-06-28 16:31:52 - gst_automation - INFO - Found captcha image element with ID 'imgCaptcha'.
+2025-06-28 16:31:53 - gst_automation - INFO - CAPTCHA solved by API: 843935
+2025-06-28 16:31:53 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:31:53 - gst_automation - INFO - Successfully sent text to ('id', 'captcha').
+2025-06-28 16:31:53 - gst_automation - INFO - CAPTCHA text entered successfully.
+2025-06-28 16:31:53 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:31:54 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button').
+2025-06-28 16:31:54 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:31:54 - gst_automation - INFO - Polling for mobile_otp from OTP server (timeout: 120s)...
+2025-06-28 16:32:12 - gst_automation - INFO - OTP '065335' received for type 'mobile_otp'!
+2025-06-28 16:32:12 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:32:12 - gst_automation - INFO - Successfully sent text to ('id', 'mobile_otp').
+2025-06-28 16:32:12 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:32:12 - gst_automation - INFO - Polling for email_otp from OTP server (timeout: 120s)...
+2025-06-28 16:33:03 - gst_automation - INFO - OTP '539812' received for type 'email_otp'!
+2025-06-28 16:33:03 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:33:03 - gst_automation - INFO - Successfully sent text to ('id', 'email-otp').
+2025-06-28 16:33:03 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:33:03 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/form/div/div/button').
+2025-06-28 16:33:08 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:33:09 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/div[2]/div/a').
+2025-06-28 16:33:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:33:09 - gst_automation - INFO - Polling for trn from OTP server (timeout: 120s)...
+2025-06-28 16:33:36 - gst_automation - INFO - OTP '072500181929TRN' received for type 'trn'!
+2025-06-28 16:33:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:33:36 - gst_automation - INFO - Successfully sent text to ('id', 'trnno').
+2025-06-28 16:33:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:33:36 - gst_automation - INFO - Solving captcha via TrueCaptcha API...
+2025-06-28 16:33:36 - gst_automation - INFO - Found visible CAPTCHA image with ID 'imgCaptcha'.
+2025-06-28 16:33:38 - gst_automation - INFO - CAPTCHA solved: 325114
+2025-06-28 16:33:38 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:33:38 - gst_automation - INFO - Successfully sent text to ('id', 'captchatrn').
+2025-06-28 16:33:38 - gst_automation - INFO - CAPTCHA entered successfully into input with ID 'captchatrn'.
+2025-06-28 16:33:38 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:33:38 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button').
+2025-06-28 16:33:38 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:33:38 - gst_automation - INFO - Polling for mobile_otp from OTP server (timeout: 120s)...
+2025-06-28 16:33:56 - gst_automation - INFO - OTP '409785' received for type 'mobile_otp'!
+2025-06-28 16:33:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:33:56 - gst_automation - INFO - Successfully sent text to ('id', 'mobile_otp').
+2025-06-28 16:33:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:33:56 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/form/div/div/button').
+2025-06-28 16:34:01 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:02 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[1]/div/div[3]/div[2]/div/div/table/tbody/tr/td[6]/button').
+2025-06-28 16:34:07 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:07 - gst_automation - INFO - Successfully sent text to ('id', 'tnm').
+2025-06-28 16:34:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:09 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Others']").
+2025-06-28 16:34:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:09 - gst_automation - INFO - Successfully sent text to ('id', 'bd_ConstBuss_oth').
+2025-06-28 16:34:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:09 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Voluntary Basis']").
+2025-06-28 16:34:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:09 - gst_automation - INFO - Successfully sent text to ('id', 'bd_cmbz').
+2025-06-28 16:34:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:10 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[1]/select/option[16]').
+2025-06-28 16:34:10 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:10 - gst_automation - INFO - Successfully sent text to ('id', 'bd_othrReg').
+2025-06-28 16:34:10 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:10 - gst_automation - INFO - Successfully sent text to ('id', 'exno').
+2025-06-28 16:34:10 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:10 - gst_automation - INFO - Successfully sent text to ('id', 'exdt').
+2025-06-28 16:34:10 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:10 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[5]/button[1]').
+2025-06-28 16:34:10 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:10 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Registration Certificate']").
+2025-06-28 16:34:12 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:34:12 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div/div/button[2]').
+2025-06-28 16:34:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:12 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:12 - gst_automation - INFO - Successfully sent text to ('id', 'tnm').
+2025-06-28 16:35:14 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:15 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Others']").
+2025-06-28 16:35:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:15 - gst_automation - INFO - Successfully sent text to ('id', 'bd_ConstBuss_oth').
+2025-06-28 16:35:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:15 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Voluntary Basis']").
+2025-06-28 16:35:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:15 - gst_automation - INFO - Successfully sent text to ('id', 'bd_cmbz').
+2025-06-28 16:35:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:15 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[1]/select/option[16]').
+2025-06-28 16:35:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:15 - gst_automation - INFO - Successfully sent text to ('id', 'bd_othrReg').
+2025-06-28 16:35:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:15 - gst_automation - INFO - Successfully sent text to ('id', 'exno').
+2025-06-28 16:35:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:15 - gst_automation - INFO - Successfully sent text to ('id', 'exdt').
+2025-06-28 16:35:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:15 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[5]/button[1]').
+2025-06-28 16:35:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:16 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Registration Certificate']").
+2025-06-28 16:35:18 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:18 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div/div/button[2]').
+2025-06-28 16:35:20 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:33 - gst_automation - INFO - Successfully sent text to ('id', 'fnm').
+2025-06-28 16:35:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:33 - gst_automation - INFO - Successfully sent text to ('id', 'pd_mname').
+2025-06-28 16:35:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:33 - gst_automation - INFO - Successfully sent text to ('id', 'pd_lname').
+2025-06-28 16:35:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:33 - gst_automation - INFO - Successfully sent text to ('id', 'ffname').
+2025-06-28 16:35:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:33 - gst_automation - INFO - Successfully sent text to ('id', 'pd_fmname').
+2025-06-28 16:35:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:33 - gst_automation - INFO - Successfully sent text to ('id', 'pd_flname').
+2025-06-28 16:35:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:33 - gst_automation - INFO - Successfully sent text to ('id', 'dob').
+2025-06-28 16:35:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:33 - gst_automation - INFO - Successfully sent text to ('id', 'mbno').
+2025-06-28 16:35:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:34 - gst_automation - INFO - Successfully sent text to ('id', 'pd_email').
+2025-06-28 16:35:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:36 - gst_automation - INFO - Successfully clicked ('css selector', 'div.tbl-format:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > fieldset:nth-child(1) > label:nth-child(3)').
+2025-06-28 16:35:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:36 - gst_automation - INFO - Successfully sent text to ('id', 'dg').
+2025-06-28 16:35:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:36 - gst_automation - INFO - Successfully sent text to ('id', 'din').
+2025-06-28 16:35:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:36 - gst_automation - INFO - Successfully sent text to ('id', 'pan').
+2025-06-28 16:35:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:35:36 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-28 16:35:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:06 - gst_automation - ERROR - Element ('xpath', "//*[text()='474001']") not clickable within 30s.
+2025-06-28 16:36:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:10 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-28 16:36:10 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:10 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='474001']").
+2025-06-28 16:36:34 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:34 - gst_automation - INFO - Successfully clicked ('id', 'confirm-mapquery-btn1').
+2025-06-28 16:36:38 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:38 - gst_automation - INFO - Successfully sent text to ('id', 'pd_bdnum').
+2025-06-28 16:36:40 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:40 - gst_automation - INFO - Successfully sent text to ('id', 'pd_upload').
+2025-06-28 16:36:40 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:41 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[3]').
+2025-06-28 16:36:43 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:43 - gst_automation - INFO - Successfully sent text to ('id', 'fnm').
+2025-06-28 16:36:43 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:51 - gst_automation - INFO - Successfully sent text to ('id', 'as_mname').
+2025-06-28 16:36:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:51 - gst_automation - INFO - Successfully sent text to ('id', 'as_lname').
+2025-06-28 16:36:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:51 - gst_automation - INFO - Successfully sent text to ('id', 'ffname').
+2025-06-28 16:36:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:51 - gst_automation - INFO - Successfully sent text to ('id', 'as_fmname').
+2025-06-28 16:36:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:51 - gst_automation - INFO - Successfully sent text to ('id', 'as_flname').
+2025-06-28 16:36:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:51 - gst_automation - INFO - Successfully sent text to ('id', 'dob').
+2025-06-28 16:36:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:51 - gst_automation - INFO - Successfully sent text to ('id', 'mbno').
+2025-06-28 16:36:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:36:51 - gst_automation - INFO - Successfully sent text to ('id', 'em').
+2025-06-28 16:36:53 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:05 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:05 - gst_automation - INFO - Successfully sent text to ('id', 'fnm').
+2025-06-28 16:37:05 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:05 - gst_automation - INFO - Successfully sent text to ('id', 'as_mname').
+2025-06-28 16:37:05 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:05 - gst_automation - INFO - Successfully sent text to ('id', 'as_lname').
+2025-06-28 16:37:05 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:05 - gst_automation - INFO - Successfully sent text to ('id', 'ffname').
+2025-06-28 16:37:05 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:06 - gst_automation - INFO - Successfully sent text to ('id', 'as_fmname').
+2025-06-28 16:37:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:06 - gst_automation - INFO - Successfully sent text to ('id', 'as_flname').
+2025-06-28 16:37:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:06 - gst_automation - INFO - Successfully sent text to ('id', 'dob').
+2025-06-28 16:37:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:06 - gst_automation - INFO - Successfully sent text to ('id', 'mbno').
+2025-06-28 16:37:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:06 - gst_automation - INFO - Successfully sent text to ('id', 'em').
+2025-06-28 16:37:08 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:08 - gst_automation - INFO - Successfully clicked ('css selector', 'div.tbl-format:nth-child(2) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > fieldset:nth-child(1) > label:nth-child(3)').
+2025-06-28 16:37:08 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:08 - gst_automation - INFO - Successfully sent text to ('id', 'dg').
+2025-06-28 16:37:08 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:08 - gst_automation - INFO - Successfully sent text to ('id', 'din').
+2025-06-28 16:37:08 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:08 - gst_automation - INFO - Successfully sent text to ('id', 'pan').
+2025-06-28 16:37:20 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:22 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-28 16:37:22 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:22 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='474001']").
+2025-06-28 16:37:22 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:22 - gst_automation - INFO - Successfully clicked ('id', 'confirm-mapquery-btn2').
+2025-06-28 16:37:22 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:22 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-28 16:37:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:37:27 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]').
+2025-06-28 16:43:02 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:43:07 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-28 16:43:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:43:09 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='474001']").
+2025-06-28 16:44:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:44:06 - gst_automation - INFO - Successfully clicked ('id', 'confirm-mapquery-btn3').
+2025-06-28 16:45:32 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:45:33 - gst_automation - INFO - Successfully sent text to ('id', 'pncd').
+2025-06-28 16:45:35 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:46:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:46:09 - gst_automation - INFO - Successfully sent text to ('id', 'pncd').
+2025-06-28 16:46:11 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:46:11 - gst_automation - INFO - Successfully sent text to ('id', 'pncd').
+2025-06-28 16:46:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:46:18 - gst_automation - INFO - Successfully sent text to ('id', 'pncd').
+2025-06-28 16:46:20 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:46:20 - gst_automation - INFO - Successfully sent text to ('id', 'pncd').
+2025-06-28 16:46:33 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:46:33 - gst_automation - INFO - Successfully sent text to ('id', 'pncd').
+2025-06-28 16:46:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:46:53 - gst_automation - INFO - Successfully sent text to ('id', 'dst').
+2025-06-28 16:50:22 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:50:25 - gst_automation - INFO - Successfully sent text to ('id', 'dst').
+2025-06-28 16:50:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:50:35 - gst_automation - INFO - Successfully sent text to ('id', 'loc').
+2025-06-28 16:50:37 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:50:37 - gst_automation - INFO - Successfully sent text to ('id', 'ppbzdtls_locality').
+2025-06-28 16:50:39 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:50:39 - gst_automation - INFO - Successfully sent text to ('id', 'st').
+2025-06-28 16:52:00 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:52:04 - gst_automation - INFO - Successfully sent text to ('id', 'dst').
+2025-06-28 16:52:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:52:06 - gst_automation - INFO - Successfully sent text to ('id', 'loc').
+2025-06-28 16:52:08 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:52:09 - gst_automation - INFO - Successfully sent text to ('id', 'ppbzdtls_locality').
+2025-06-28 16:52:11 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:52:11 - gst_automation - INFO - Successfully sent text to ('id', 'st').
+2025-06-28 16:52:13 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:52:13 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-28 16:52:40 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:52:43 - gst_automation - INFO - Successfully sent text to ('id', 'dst').
+2025-06-28 16:52:45 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:52:46 - gst_automation - INFO - Successfully sent text to ('id', 'loc').
+2025-06-28 16:52:48 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:52:48 - gst_automation - INFO - Successfully sent text to ('id', 'ppbzdtls_locality').
+2025-06-28 16:52:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:52:50 - gst_automation - INFO - Successfully sent text to ('id', 'st').
+2025-06-28 16:52:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 16:52:52 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-28 17:01:45 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:01:45 - gst_automation - INFO - Successfully sent text to ('id', 'pncd').
+2025-06-28 17:01:48 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:01:50 - gst_automation - INFO - Successfully sent text to ('id', 'dst').
+2025-06-28 17:01:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:02:42 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:02:44 - gst_automation - INFO - Successfully sent text to ('id', 'dst').
+2025-06-28 17:02:46 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:02:47 - gst_automation - INFO - Successfully sent text to ('id', 'loc').
+2025-06-28 17:02:49 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:02:49 - gst_automation - INFO - Successfully sent text to ('id', 'st').
+2025-06-28 17:02:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:02:51 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-28 17:03:39 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:03:41 - gst_automation - INFO - Successfully sent text to ('id', 'dst').
+2025-06-28 17:03:43 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:03:44 - gst_automation - INFO - Successfully sent text to ('id', 'loc').
+2025-06-28 17:03:46 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:03:46 - gst_automation - INFO - Successfully sent text to ('id', 'st').
+2025-06-28 17:03:48 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:03:48 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-28 17:06:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:07:11 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:07:41 - gst_automation - ERROR - Element ('id', 'Ward 1') not clickable within 30s.
+2025-06-28 17:07:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:08:41 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:08:41 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Ward 1']").
+2025-06-28 17:11:10 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:11:41 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:12:11 - gst_automation - ERROR - Element ('xpath', "//*[text()='Delhi South']") not clickable within 30s.
+2025-06-28 17:12:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:12:15 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='DELHI SOUTH']").
+2025-06-28 17:12:49 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:12:49 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='DWARKA']").
+2025-06-28 17:13:19 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:13:19 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='RANGE - 81']").
+2025-06-28 17:14:46 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:14:46 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Others']").
+2025-06-28 17:16:08 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:16:08 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Legal ownership document']").
+2025-06-28 17:21:38 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:21:38 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Taxpayer']").
+2025-06-28 17:21:38 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:21:38 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Delhi']").
+2025-06-28 17:21:43 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:21:44 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='South West Delhi']").
+2025-06-28 17:21:44 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:21:44 - gst_automation - INFO - Successfully sent text to ('id', 'bnm').
+2025-06-28 17:21:45 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:21:45 - gst_automation - INFO - Successfully sent text to ('id', 'pan_card').
+2025-06-28 17:21:45 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:21:45 - gst_automation - INFO - Successfully sent text to ('id', 'email').
+2025-06-28 17:21:45 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:21:45 - gst_automation - INFO - Successfully sent text to ('id', 'mobile').
+2025-06-28 17:21:49 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:21:49 - gst_automation - INFO - Solving captcha via TrueCaptcha API...
+2025-06-28 17:21:49 - gst_automation - INFO - Found captcha image element with ID 'imgCaptcha'.
+2025-06-28 17:21:51 - gst_automation - INFO - CAPTCHA solved by API: 958473
+2025-06-28 17:21:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:21:51 - gst_automation - INFO - Successfully sent text to ('id', 'captcha').
+2025-06-28 17:21:51 - gst_automation - INFO - CAPTCHA text entered successfully.
+2025-06-28 17:22:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:22:06 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button').
+2025-06-28 17:23:03 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:23:03 - gst_automation - INFO - Polling for mobile_otp from OTP server (timeout: 120s)...
+2025-06-28 17:23:03 - gst_automation - INFO - OTP '934269' received for type 'mobile_otp'!
+2025-06-28 17:23:03 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:23:03 - gst_automation - INFO - Successfully sent text to ('id', 'mobile_otp').
+2025-06-28 17:23:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:23:09 - gst_automation - INFO - Polling for email_otp from OTP server (timeout: 120s)...
+2025-06-28 17:23:27 - gst_automation - INFO - OTP '409785' received for type 'email_otp'!
+2025-06-28 17:23:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:23:27 - gst_automation - INFO - Successfully sent text to ('id', 'email-otp').
+2025-06-28 17:23:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:23:36 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/form/div/div/button').
+2025-06-28 17:24:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:24:09 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Taxpayer']").
+2025-06-28 17:24:09 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:24:10 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Delhi']").
+2025-06-28 17:24:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:24:15 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='South West Delhi']").
+2025-06-28 17:24:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:24:15 - gst_automation - INFO - Successfully sent text to ('id', 'bnm').
+2025-06-28 17:24:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:24:15 - gst_automation - INFO - Successfully sent text to ('id', 'pan_card').
+2025-06-28 17:24:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:24:15 - gst_automation - INFO - Successfully sent text to ('id', 'email').
+2025-06-28 17:24:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:24:15 - gst_automation - INFO - Successfully sent text to ('id', 'mobile').
+2025-06-28 17:24:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:24:15 - gst_automation - INFO - Solving captcha via TrueCaptcha API...
+2025-06-28 17:24:15 - gst_automation - INFO - Found captcha image element with ID 'imgCaptcha'.
+2025-06-28 17:24:20 - gst_automation - INFO - CAPTCHA solved by API: 757614
+2025-06-28 17:24:20 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:24:20 - gst_automation - INFO - Successfully sent text to ('id', 'captcha').
+2025-06-28 17:24:20 - gst_automation - INFO - CAPTCHA text entered successfully.
+2025-06-28 17:24:22 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:24:22 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button').
+2025-06-28 17:24:43 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-28 17:24:43 - gst_automation - INFO - Polling for mobile_otp from OTP server (timeout: 120s)...

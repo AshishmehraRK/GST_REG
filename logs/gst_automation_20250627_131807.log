@@ -1,0 +1,28 @@
+2025-06-27 13:18:32 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:18:32 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Taxpayer']").
+2025-06-27 13:18:40 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:18:41 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Taxpayer']").
+2025-06-27 13:18:42 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:18:42 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Delhi']").
+2025-06-27 13:18:43 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:18:53 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:18:53 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Taxpayer']").
+2025-06-27 13:18:54 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:18:54 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Delhi']").
+2025-06-27 13:18:55 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:18:55 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='South West Delhi']").
+2025-06-27 13:19:00 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:19:00 - gst_automation - INFO - Successfully sent text to ('id', 'bnm').
+2025-06-27 13:19:01 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:19:01 - gst_automation - INFO - Successfully sent text to ('id', 'pan_card').
+2025-06-27 13:19:02 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:19:02 - gst_automation - INFO - Successfully sent text to ('id', 'email').
+2025-06-27 13:19:03 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:19:03 - gst_automation - INFO - Successfully sent text to ('id', 'mobile').
+2025-06-27 13:19:11 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:19:11 - gst_automation - INFO - Solving captcha via TrueCaptcha API...
+2025-06-27 13:19:11 - gst_automation - INFO - Found captcha image element with ID 'imgCaptcha'.
+2025-06-27 13:19:14 - gst_automation - INFO - CAPTCHA solved by API: 420313
+2025-06-27 13:19:14 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 13:19:14 - gst_automation - INFO - Successfully sent text to ('id', 'captcha').
+2025-06-27 13:19:14 - gst_automation - INFO - CAPTCHA text entered successfully.

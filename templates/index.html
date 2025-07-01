@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Submitter</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f7f7f7; }
+        .container { background-color: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; width: 320px; }
+        h1 { margin-top: 0; font-size: 24px; color: #333; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; color: #555; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .radio-group { display: flex; justify-content: space-around; margin-bottom: 20px; }
+        .radio-group label { display: flex; align-items: center; cursor: pointer; }
+        input[type="radio"] { margin-right: 5px; }
+        button { width: 100%; padding: 12px; background-color: #007aff; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; transition: background-color 0.2s; }
+        button:hover { background-color: #005bb5; }
+        #message { margin-top: 20px; font-size: 14px; }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Input OTP</h1>
+        <form id="otpForm">
+            <div class="form-group">
+                <label>OTP Type:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="otp_type" value="mobile_otp"> Mobile</label>
+                    <label><input type="radio" name="otp_type" value="email_otp"> Email</label>
+                    <label><input type="radio" name="otp_type" value="trn"> TRN</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="otpValue">OTP / TRN Value:</label>
+                <input type="text" id="otpValue" name="otp_value" required title="Enter a valid OTP or TRN.">
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        document.getElementById('otpForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const otpType = document.querySelector('input[name="otp_type"]:checked').value;
+            const otpValue = document.getElementById('otpValue').value;
+            const messageDiv = document.getElementById('message');
+
+            const endpoint = `/submit-${otpType.replace('_', '-')}`;
+            
+            const payload = {};
+            payload[otpType] = otpValue;
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    messageDiv.textContent = result.data.message;
+                    messageDiv.className = 'success';
+                } else {
+                    messageDiv.textContent = result.data.message || 'An unknown error occurred.';
+                    messageDiv.className = 'error';
+                }
+            } catch (error) {
+                messageDiv.textContent = 'Failed to connect to the server. Is it running?';
+                messageDiv.className = 'error';
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,57 @@
+services:
+  gst-automation:
+    build: .
+    container_name: gst-automation-api
+    ports:
+      - "8001:8001"
+    volumes:
+      # Mount logs directory to persist logs
+      - ./logs:/app/logs
+      # Mount uploads directory for document uploads
+      - ./uploads:/app/uploads
+      # Mount downloads directory for any downloaded files
+      - ./downloads:/app/downloads
+      # Mount config file (optional - API can accept JSON directly)
+      - ./config.json:/app/config.json
+    environment:
+      # Flask environment
+      - FLASK_ENV=production
+      - FLASK_DEBUG=false
+      # Display for headless browser
+      - DISPLAY=:99
+      # Custom environment variables
+      - TZ=Asia/Kolkata
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - gst-network
+
+  # Optional: Add a reverse proxy (uncomment if needed)
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: gst-nginx
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf
+  #   depends_on:
+  #     - gst-automation
+  #   networks:
+  #     - gst-network
+
+networks:
+  gst-network:
+    driver: bridge
+
+volumes:
+  logs:
+    driver: local
+  uploads:
+    driver: local
+  downloads:
+    driver: local 

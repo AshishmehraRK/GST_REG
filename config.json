@@ -1,0 +1,92 @@
+{
+    "initial_registration_details": {
+        "why_are_you_obtaining_registration": "Taxpayer",
+        "business_name": "ASHISH SINGH MEHRA",
+        "pan_card": "GVBPM4605P",
+        "email": "ashishmehra@registerkaro.com",
+        "mobile_number": "9354886960",
+        "selected_taxpayer_type": "Taxpayer",
+        "selected_state": "Delhi",
+        "selected_district": "South West Delhi"
+    },
+    "business_details": {
+        "trade_name": "Register Karo",
+        "constitution_of_business": "Others",
+        "specific_other_constitution": "Personal",
+        "reason_to_obtain_registration": "Voluntary Basis",
+        "date_of_commencement_of_business": "19/06/2010",
+        "other_registration_type": "Personal",
+        "other_registration_number": "072500181190TRN",
+        "date_of_registration": "28/06/2025"
+    },
+    "promoter_partner_details": {
+        "first_name": "Ashish",
+        "middle_name": "Singh",
+        "last_name": "Mehra",
+        "father_first_name": "Chanchal",
+        "father_middle_name": "Singh",
+        "father_last_name": "Mehra",
+        "date_of_birth": "19/06/2001",
+        "mobile_number": "9354886960",
+        "email": "ashishmehra1906@gmail.com",
+        "gender": "Male",
+        "designation_status": "Director",
+        "director_identification_number": "123456789",
+        "is_citizen_of_india": "Yes",
+        "pan_number": "GVBPM4605P",
+        "passport_number": "",
+        "pincode_map_search": "110",
+        "building_flat_door_no": "123",
+        "document_upload": "/Users/ashishmehra/Desktop/mew2.jpeg",
+        "is_also_authorized_signatory": "Yes"
+    },
+    "authorized_signatory_details": [
+        {
+            "first_name": "",
+            "middle_name": "",
+            "last_name": "",
+            "father_first_name": "",
+            "father_middle_name": "",
+            "father_last_name": "",
+            "date_of_birth": "",
+            "mobile_number": "",
+            "email": "",
+            "gender": "",
+            "designation_status": "",
+            "director_identification_number": "",
+            "is_citizen_of_india": "",
+            "pan_number": "",
+            "passport_number": "",
+            "pincode_map_search": "",
+            "building_flat_door_no": "",
+            "type_of_authorization": "Letter of Authorization",
+            "document_upload1": "",
+            "document_upload2": "/Users/ashishmehra/Desktop/mew2.jpeg"
+        }
+    ],
+    "principal_place_of_business_details": {
+        "address_map_search": "110071",
+        "pincode": "110071",
+        "district": "South West Delhi",
+        "city_town_village": "New Delhi",
+        "street": "18",
+        "building_no": "12",
+        "jurisdiction": {
+            "ward": "Ward 1",
+            "commissionerate": "DELHI SOUTH",
+            "division": "DWARKA",
+            "range": "RANGE - 81"
+        },
+        "nature_of_possession_of_premises": "Others",
+        "document_proof": "Legal ownership document",
+        "document_upload": "/Users/ashishmehra/Downloads/dummy.pdf",
+        "document_upload_2": "/Users/ashishmehra/Downloads/dummy.pdf",
+        "nature_of_business": [
+            "Bonded Warehouse",
+            "Export"
+        ]
+    },
+    "goods_services_details": {
+        "hsn_value": "1601"
+    }
+}

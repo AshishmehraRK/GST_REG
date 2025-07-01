@@ -1,0 +1,88 @@
+2025-06-30 18:22:40 - gst_automation - INFO - Starting automation with the provided configuration.
+2025-06-30 18:22:50 - gst_automation - INFO - Filling Part A: Initial Registration Details...
+2025-06-30 18:22:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 18:22:50 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Taxpayer']").
+2025-06-30 18:22:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 18:22:51 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Delhi']").
+2025-06-30 18:22:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 18:22:56 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='South West Delhi']").
+2025-06-30 18:22:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 18:22:56 - gst_automation - INFO - Successfully sent text to ('id', 'bnm').
+2025-06-30 18:22:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 18:22:56 - gst_automation - INFO - Successfully sent text to ('id', 'pan_card').
+2025-06-30 18:22:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 18:22:56 - gst_automation - INFO - Successfully sent text to ('id', 'email').
+2025-06-30 18:22:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 18:22:56 - gst_automation - INFO - Successfully sent text to ('id', 'mobile').
+2025-06-30 18:22:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 18:22:56 - gst_automation - INFO - Solving captcha via TrueCaptcha API...
+2025-06-30 18:22:56 - gst_automation - INFO - Found captcha image element with ID 'imgCaptcha'.
+2025-06-30 18:22:58 - gst_automation - INFO - CAPTCHA solved by API: 771213
+2025-06-30 18:22:58 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 18:22:58 - gst_automation - INFO - Successfully sent text to ('id', 'captcha').
+2025-06-30 18:22:58 - gst_automation - INFO - CAPTCHA text entered successfully.
+2025-06-30 18:22:58 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 18:22:58 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button').
+2025-06-30 18:22:58 - gst_automation - INFO - PAUSING FOR OTP: Please complete the OTP verification in the browser. Pausing for 60 seconds.
+2025-06-30 18:23:58 - gst_automation - INFO - Automation process finished. Browser will close in 30 seconds.
+2025-06-30 18:24:31 - gst_automation - ERROR - A critical error occurred in the API: Message: Browsing context has been discarded
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:199:5
+NoSuchWindowError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:747:5
+assert.that/<@chrome://remote/content/shared/webdriver/Assert.sys.mjs:559:13
+assert.open@chrome://remote/content/shared/webdriver/Assert.sys.mjs:147:4
+GeckoDriver.prototype.execute_@chrome://remote/content/marionette/driver.sys.mjs:974:15
+GeckoDriver.prototype.executeScript@chrome://remote/content/marionette/driver.sys.mjs:886:15
+despatch@chrome://remote/content/marionette/server.sys.mjs:318:40
+execute@chrome://remote/content/marionette/server.sys.mjs:289:16
+onPacket/<@chrome://remote/content/marionette/server.sys.mjs:262:20
+onPacket@chrome://remote/content/marionette/server.sys.mjs:263:9
+_onJSONObjectReady/<@chrome://remote/content/marionette/transport.sys.mjs:494:20
+
+2025-06-30 18:24:31 - gst_automation - ERROR - Traceback (most recent call last):
+  File "/Users/ashishmehra/Desktop/GST_REG/app.py", line 167, in post
+    run_full_automation(config)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/Users/ashishmehra/Desktop/GST_REG/app.py", line 85, in run_full_automation
+    nigga.click_element((By.XPATH, "/html/body/div[2]/div[1]/div/div[3]/div[2]/div/div/table/tbody/tr/td[6]/button"))
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ashishmehra/Desktop/GST_REG/functions.py", line 105, in click_element
+    self.wait_for_document_ready()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/ashishmehra/Desktop/GST_REG/functions.py", line 47, in wait_for_document_ready
+    WebDriverWait(self.driver, self.default_timeout).until(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        lambda d: d.execute_script("return document.readyState") == "complete"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ashishmehra/Desktop/GST_REG/venv/lib/python3.13/site-packages/selenium/webdriver/support/wait.py", line 129, in until
+    value = method(self._driver)
+  File "/Users/ashishmehra/Desktop/GST_REG/functions.py", line 48, in <lambda>
+    lambda d: d.execute_script("return document.readyState") == "complete"
+              ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ashishmehra/Desktop/GST_REG/venv/lib/python3.13/site-packages/selenium/webdriver/remote/webdriver.py", line 544, in execute_script
+    return self.execute(command, {"script": script, "args": converted_args})["value"]
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ashishmehra/Desktop/GST_REG/venv/lib/python3.13/site-packages/selenium/webdriver/remote/webdriver.py", line 447, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/ashishmehra/Desktop/GST_REG/venv/lib/python3.13/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchWindowException: Message: Browsing context has been discarded
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:199:5
+NoSuchWindowError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:747:5
+assert.that/<@chrome://remote/content/shared/webdriver/Assert.sys.mjs:559:13
+assert.open@chrome://remote/content/shared/webdriver/Assert.sys.mjs:147:4
+GeckoDriver.prototype.execute_@chrome://remote/content/marionette/driver.sys.mjs:974:15
+GeckoDriver.prototype.executeScript@chrome://remote/content/marionette/driver.sys.mjs:886:15
+despatch@chrome://remote/content/marionette/server.sys.mjs:318:40
+execute@chrome://remote/content/marionette/server.sys.mjs:289:16
+onPacket/<@chrome://remote/content/marionette/server.sys.mjs:262:20
+onPacket@chrome://remote/content/marionette/server.sys.mjs:263:9
+_onJSONObjectReady/<@chrome://remote/content/marionette/transport.sys.mjs:494:20
+
+

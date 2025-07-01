@@ -1,0 +1,25 @@
+2025-06-27 15:51:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 15:51:56 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Taxpayer']").
+2025-06-27 15:51:56 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 15:51:57 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Delhi']").
+2025-06-27 15:51:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 15:51:59 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='South West Delhi']").
+2025-06-27 15:51:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 15:51:59 - gst_automation - INFO - Successfully sent text to ('id', 'bnm').
+2025-06-27 15:51:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 15:51:59 - gst_automation - INFO - Successfully sent text to ('id', 'pan_card').
+2025-06-27 15:51:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 15:51:59 - gst_automation - INFO - Successfully sent text to ('id', 'email').
+2025-06-27 15:51:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 15:51:59 - gst_automation - INFO - Successfully sent text to ('id', 'mobile').
+2025-06-27 15:51:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 15:51:59 - gst_automation - INFO - Solving captcha via TrueCaptcha API...
+2025-06-27 15:51:59 - gst_automation - INFO - Found captcha image element with ID 'imgCaptcha'.
+2025-06-27 15:52:01 - gst_automation - INFO - CAPTCHA solved by API: 626664
+2025-06-27 15:52:01 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 15:52:01 - gst_automation - INFO - Successfully sent text to ('id', 'captcha').
+2025-06-27 15:52:01 - gst_automation - INFO - CAPTCHA text entered successfully.
+2025-06-27 15:52:01 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 15:52:01 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button').
+2025-06-27 15:52:01 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-27 15:52:01 - gst_automation - INFO - Polling for mobile from OTP server (timeout: 120s)...

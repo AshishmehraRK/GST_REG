@@ -1,0 +1,199 @@
+2025-06-30 17:10:29 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:10:29 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Taxpayer']").
+2025-06-30 17:10:29 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:10:29 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Delhi']").
+2025-06-30 17:10:36 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:10:37 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='South West Delhi']").
+2025-06-30 17:10:38 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:10:38 - gst_automation - INFO - Successfully sent text to ('id', 'bnm').
+2025-06-30 17:10:39 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:10:40 - gst_automation - INFO - Successfully sent text to ('id', 'pan_card').
+2025-06-30 17:10:42 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:10:43 - gst_automation - INFO - Successfully sent text to ('id', 'email').
+2025-06-30 17:10:45 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:10:45 - gst_automation - INFO - Successfully sent text to ('id', 'mobile').
+2025-06-30 17:10:48 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:10:48 - gst_automation - INFO - Solving captcha via TrueCaptcha API...
+2025-06-30 17:10:48 - gst_automation - INFO - Found captcha image element with ID 'imgCaptcha'.
+2025-06-30 17:10:50 - gst_automation - INFO - CAPTCHA solved by API: 958668
+2025-06-30 17:10:50 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:10:50 - gst_automation - INFO - Successfully sent text to ('id', 'captcha').
+2025-06-30 17:10:50 - gst_automation - INFO - CAPTCHA text entered successfully.
+2025-06-30 17:10:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:10:59 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button').
+2025-06-30 17:12:11 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:12:11 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/div[2]/div/a').
+2025-06-30 17:12:29 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:12:29 - gst_automation - INFO - Solving captcha via TrueCaptcha API...
+2025-06-30 17:12:29 - gst_automation - INFO - Found visible CAPTCHA image with ID 'imgCaptcha'.
+2025-06-30 17:12:32 - gst_automation - INFO - CAPTCHA solved: 859660
+2025-06-30 17:12:32 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:12:32 - gst_automation - INFO - Successfully sent text to ('id', 'captchatrn').
+2025-06-30 17:12:32 - gst_automation - INFO - CAPTCHA entered successfully into input with ID 'captchatrn'.
+2025-06-30 17:12:32 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:12:33 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button').
+2025-06-30 17:12:48 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:12:48 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/form/div/div/button').
+2025-06-30 17:12:55 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:12:55 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div[1]/div/div[3]/div[2]/div/div/table/tbody/tr/td[6]/button').
+2025-06-30 17:13:10 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:10 - gst_automation - INFO - Successfully sent text to ('id', 'tnm').
+2025-06-30 17:13:18 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:18 - gst_automation - INFO - Successfully sent text to ('id', 'tnm').
+2025-06-30 17:13:21 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:21 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Others']").
+2025-06-30 17:13:23 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:23 - gst_automation - INFO - Successfully sent text to ('id', 'bd_ConstBuss_oth').
+2025-06-30 17:13:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:25 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Voluntary Basis']").
+2025-06-30 17:13:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:25 - gst_automation - INFO - Successfully sent text to ('id', 'bd_cmbz').
+2025-06-30 17:13:25 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:25 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[1]/select/option[16]').
+2025-06-30 17:13:26 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:27 - gst_automation - INFO - Successfully sent text to ('id', 'bd_othrReg').
+2025-06-30 17:13:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:27 - gst_automation - INFO - Successfully sent text to ('id', 'exno').
+2025-06-30 17:13:29 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:29 - gst_automation - INFO - Successfully sent text to ('id', 'exdt').
+2025-06-30 17:13:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:31 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[5]/button[1]').
+2025-06-30 17:13:31 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:32 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Registration Certificate']").
+2025-06-30 17:13:41 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:41 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div/div/button[2]').
+2025-06-30 17:13:41 - gst_automation - INFO - Filling details for promoter: Ashish Mehra
+2025-06-30 17:13:51 - gst_automation - INFO - Filling personal information...
+2025-06-30 17:13:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:51 - gst_automation - INFO - Successfully sent text to ('id', 'fnm').
+2025-06-30 17:13:51 - gst_automation - INFO - ✓ First name filled
+2025-06-30 17:13:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:51 - gst_automation - INFO - Successfully sent text to ('id', 'pd_mname').
+2025-06-30 17:13:51 - gst_automation - INFO - ✓ Middle name filled
+2025-06-30 17:13:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:51 - gst_automation - INFO - Successfully sent text to ('id', 'pd_lname').
+2025-06-30 17:13:51 - gst_automation - INFO - ✓ Last name filled
+2025-06-30 17:13:51 - gst_automation - INFO - Filling father details...
+2025-06-30 17:13:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:51 - gst_automation - INFO - Successfully sent text to ('id', 'ffname').
+2025-06-30 17:13:51 - gst_automation - INFO - ✓ Father first name filled
+2025-06-30 17:13:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:51 - gst_automation - INFO - Successfully sent text to ('id', 'pd_fmname').
+2025-06-30 17:13:51 - gst_automation - INFO - ✓ Father middle name filled
+2025-06-30 17:13:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:51 - gst_automation - INFO - Successfully sent text to ('id', 'pd_flname').
+2025-06-30 17:13:51 - gst_automation - INFO - ✓ Father last name filled
+2025-06-30 17:13:51 - gst_automation - INFO - Filling additional personal details...
+2025-06-30 17:13:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:51 - gst_automation - INFO - Successfully sent text to ('id', 'dob').
+2025-06-30 17:13:51 - gst_automation - INFO - ✓ Date of birth filled
+2025-06-30 17:13:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:51 - gst_automation - INFO - Successfully sent text to ('id', 'mbno').
+2025-06-30 17:13:51 - gst_automation - INFO - ✓ Mobile number filled
+2025-06-30 17:13:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:13:51 - gst_automation - INFO - Successfully sent text to ('id', 'pd_email').
+2025-06-30 17:13:51 - gst_automation - INFO - ✓ Email filled
+2025-06-30 17:13:51 - gst_automation - INFO - Selecting gender...
+2025-06-30 17:14:02 - gst_automation - INFO - ✓ Male gender selected
+2025-06-30 17:14:02 - gst_automation - INFO - Filling professional details...
+2025-06-30 17:14:02 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:14:02 - gst_automation - INFO - Successfully sent text to ('id', 'dg').
+2025-06-30 17:14:02 - gst_automation - INFO - ✓ Designation filled
+2025-06-30 17:14:02 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:14:02 - gst_automation - INFO - Successfully sent text to ('id', 'din').
+2025-06-30 17:14:02 - gst_automation - INFO - ✓ Director ID filled
+2025-06-30 17:14:02 - gst_automation - INFO - Handling citizenship details...
+2025-06-30 17:14:02 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:14:02 - gst_automation - INFO - Successfully sent text to ('id', 'pan').
+2025-06-30 17:14:02 - gst_automation - INFO - ✓ PAN number filled
+2025-06-30 17:14:02 - gst_automation - INFO - Filling address details...
+2025-06-30 17:14:02 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:14:02 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-30 17:14:02 - gst_automation - INFO - ✓ Address search field filled
+2025-06-30 17:14:15 - gst_automation - INFO - ✓ Address suggestion clicked
+2025-06-30 17:14:26 - gst_automation - INFO - ✓ Address confirmation clicked
+2025-06-30 17:14:26 - gst_automation - INFO - Filling building details...
+2025-06-30 17:14:26 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:14:26 - gst_automation - INFO - Successfully sent text to ('id', 'pd_bdnum').
+2025-06-30 17:14:26 - gst_automation - INFO - ✓ Building number filled
+2025-06-30 17:14:26 - gst_automation - INFO - Uploading document...
+2025-06-30 17:14:26 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:14:26 - gst_automation - INFO - Successfully sent text to ('id', 'pd_upload').
+2025-06-30 17:14:26 - gst_automation - INFO - ✓ Document uploaded
+2025-06-30 17:14:26 - gst_automation - INFO - Handling authorized signatory option...
+2025-06-30 17:14:37 - gst_automation - INFO - ✓ Authorized signatory option selected
+2025-06-30 17:14:37 - gst_automation - INFO - Successfully completed filling details for Ashish Mehra
+2025-06-30 17:14:37 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:14:38 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[3]').
+2025-06-30 17:14:38 - gst_automation - INFO - Successfully clicked Save & Continue for promoter 1
+2025-06-30 17:14:40 - gst_automation - INFO - All promoters processed. Clicking final Save & Continue button.
+2025-06-30 17:14:55 - gst_automation - INFO - Successfully clicked final Save & Continue.
+2025-06-30 17:14:55 - gst_automation - INFO - Starting to fill details for 1 authorized signatories
+2025-06-30 17:14:55 - gst_automation - INFO - Processing signatory 1/1: 
+2025-06-30 17:14:55 - gst_automation - INFO - Filling details for signatory:  
+2025-06-30 17:14:57 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:14:57 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/fieldset[2]/div/div[2]/div/fieldset/div/select/option[2]').
+2025-06-30 17:14:57 - gst_automation - INFO - Last signatory processed. Clicking final 'Save & Continue'.
+2025-06-30 17:14:57 - gst_automation - INFO - Successfully clicked final 'Save & Continue' for Authorized Signatory section.
+2025-06-30 17:15:00 - gst_automation - INFO - Completed authorized signatory details filling process
+2025-06-30 17:16:06 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:16:07 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]').
+2025-06-30 17:16:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:16:16 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div/div/button[2]').
+2025-06-30 17:16:23 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:16:24 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-30 17:16:26 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:16:29 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='110071']").
+2025-06-30 17:16:34 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:16:51 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:16:52 - gst_automation - INFO - Successfully sent text to ('id', 'onMapSerachId').
+2025-06-30 17:16:54 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:16:55 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='110071']").
+2025-06-30 17:17:02 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:17:03 - gst_automation - INFO - Successfully clicked ('id', 'confirm-mapquery-btn3').
+2025-06-30 17:17:57 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:17:57 - gst_automation - INFO - Successfully sent text to ('id', 'pncd').
+2025-06-30 17:18:07 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:18:09 - gst_automation - INFO - Successfully sent text to ('id', 'dst').
+2025-06-30 17:18:11 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:18:12 - gst_automation - INFO - Successfully sent text to ('id', 'loc').
+2025-06-30 17:18:14 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:18:14 - gst_automation - INFO - Successfully sent text to ('id', 'st').
+2025-06-30 17:18:16 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:18:16 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-30 17:18:29 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:18:30 - gst_automation - INFO - Successfully clicked ('id', 'bp_flrnum').
+2025-06-30 17:18:45 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:18:47 - gst_automation - INFO - Successfully sent text to ('id', 'dst').
+2025-06-30 17:18:49 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:18:50 - gst_automation - INFO - Successfully sent text to ('id', 'loc').
+2025-06-30 17:18:52 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:18:52 - gst_automation - INFO - Successfully sent text to ('id', 'st').
+2025-06-30 17:18:54 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:18:54 - gst_automation - INFO - Successfully sent text to ('id', 'bno').
+2025-06-30 17:19:08 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:19:08 - gst_automation - INFO - Successfully clicked ('id', 'bp_flrnum').
+2025-06-30 17:19:13 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:19:13 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Ward 1']").
+2025-06-30 17:19:17 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:19:17 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='DELHI SOUTH']").
+2025-06-30 17:19:20 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:19:20 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='DWARKA']").
+2025-06-30 17:19:24 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:19:24 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='RANGE - 81']").
+2025-06-30 17:19:27 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:19:28 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Others']").
+2025-06-30 17:19:30 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:19:30 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Legal ownership document']").
+2025-06-30 17:19:46 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:19:47 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div/div/button[2]').
+2025-06-30 17:19:54 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:19:54 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div/div[2]/div/button[2]').
+2025-06-30 17:19:59 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:20:15 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:20:47 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:20:47 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div/button').
+2025-06-30 17:22:57 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:22:57 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div[2]/div/button').
+2025-06-30 17:45:00 - gst_automation - INFO - Document is in 'complete' ready state.
+2025-06-30 17:45:00 - gst_automation - INFO - Successfully clicked ('xpath', '/html/body/div[2]/div/div/div[3]/form/div/div/button[2]').
