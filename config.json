@@ -15,9 +15,11 @@
         "specific_other_constitution": "Personal",
         "reason_to_obtain_registration": "Voluntary Basis",
         "date_of_commencement_of_business": "19/06/2010",
+        "type_of_registration": "Others (Please Specify)",
         "other_registration_type": "Personal",
         "other_registration_number": "072500181190TRN",
-        "date_of_registration": "28/06/2025"
+        "date_of_registration": "28/06/2025",
+        "proof_of_consititution": "/Users/ashishmehra/Downloads/dummy.pdf"
     },
     "promoter_partner_details": {
         "first_name": "Ashish",

@@ -252,6 +252,7 @@ def fill_single_promoter_details(driver, nigga, logger, promoter_data_item):
         try:
             address = promoter_data_item.get('pincode_map_search', '')
             if address:
+                time.sleep(2)
                 nigga.send_text((By.ID, "onMapSerachId"), address)
                 logger.info("✓ Address search field filled")
                 time.sleep(2)  # Wait for suggestions to load

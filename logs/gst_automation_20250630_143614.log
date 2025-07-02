@@ -1,8 +1,0 @@
-2025-06-30 14:39:23 - gst_automation - INFO - Document is in 'complete' ready state.
-2025-06-30 14:39:23 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Taxpayer']").
-2025-06-30 14:39:23 - gst_automation - INFO - Document is in 'complete' ready state.
-2025-06-30 14:39:24 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='Delhi']").
-2025-06-30 14:39:36 - gst_automation - INFO - Document is in 'complete' ready state.
-2025-06-30 14:39:36 - gst_automation - INFO - Successfully clicked ('xpath', "//*[text()='South West Delhi']").
-2025-06-30 14:39:42 - gst_automation - INFO - Document is in 'complete' ready state.
-2025-06-30 14:39:42 - gst_automation - INFO - Successfully sent text to ('id', 'bnm').
