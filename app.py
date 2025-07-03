@@ -98,6 +98,7 @@ def run_full_automation(config):
         time.sleep(5)
 
         # 1. Initial Registration (Part A)
+        time.sleep(2)
         logger.info("Filling Part A: Initial Registration Details...")
         registration = config['initial_registration_details']
         values_to_click = [registration['selected_taxpayer_type'], registration['selected_state']]
@@ -110,7 +111,9 @@ def run_full_automation(config):
         helper.send_text((By.ID, "email"), registration['email'])
         helper.send_text((By.ID, "mobile"), registration['mobile_number'])
         helper.solve_and_enter_captcha()
-        helper.click_element((By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button"))
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button", "Submit button")
+        time.sleep(2)
+        safe_click_with_dimmer_wait(driver, "/html/body/table-view/div/div/div/div/div[2]/a[2]", "Continue link")
 
         # 2. Handle Mobile and Email OTP
         logger.info("Waiting for Mobile and Email OTP submission...")
@@ -121,31 +124,31 @@ def run_full_automation(config):
         helper.send_text((By.ID, "email-otp"), email_otp)
 
         time.sleep(2)
-        helper.click_element((By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/form/div/div/button")) # Proceed after OTPs
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/form/div/div/button", "Proceed after OTPs button") # Proceed after OTPs
 
         # 3. Handle TRN (Temporary Reference Number)
         logger.info("Waiting for TRN submission to log in...")
         time.sleep(5) # Wait for TRN success page to load
         
         # Proceed to login page
-        helper.click_element((By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/div[2]/div/a")) 
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/div[2]/div/a", "Login page link") 
         
         trn = helper.poll_for_otp("trn")
         helper.send_text((By.ID, "trnno"), trn)
         helper.handle_initial_captcha()
-        helper.click_element((By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button")) # Proceed with TRN
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button", "Proceed with TRN button") # Proceed with TRN
 
         # 4. Handle Post-TRN Login OTP
         logger.info("Waiting for OTP after TRN login...")
         login_otp = helper.poll_for_otp("mobile_otp") # GST portal asks for mobile/email OTP again
         helper.send_text((By.ID, "mobile_otp"), login_otp)
-        helper.click_element((By.XPATH, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/form/div/div/button")) # Proceed
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/form/div/div/button", "Final proceed button") # Proceed
 
         # 5. Continue with Part B of the application
         logger.info("Successfully logged in. Starting Part B...")
         time.sleep(5)
-        # Click the "Action" button on the dashboard
-        helper.click_element((By.XPATH, "/html/body/div[2]/div[1]/div/div[3]/div[2]/div/div/table/tbody/tr/td[6]/button"))
+        # Click the "Action" button on the dashboard with dimmer safety
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div[1]/div/div[3]/div[2]/div/div/table/tbody/tr/td[6]/button", "Action button")
 
         # Business Details
         logger.info("Filling Part B: Business Details...")
@@ -175,10 +178,10 @@ def run_full_automation(config):
         if business_details.get('date_of_registration'):
             helper.send_text((By.ID, "exdt"), business_details['date_of_registration'])
         
-        helper.click_element((By.XPATH, "/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[5]/button[1]")) # Save & Continue
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[4]/button[1]", "Business details Save & Continue button") # Save & Continue
 
         # Handle Registration Certificate Upload
-        helper.click_element((By.XPATH, "//*[text()='Registration Certificate']"))
+        helper.click_element((By.XPATH, f"//*[text()='{business_details['Proof_of_Constitution_of_Business']}']"))
         time.sleep(2)
         
         if business_details.get('proof_of_consititution'):
@@ -189,16 +192,21 @@ def run_full_automation(config):
 
         # Promoter/Partner Details
         logger.info("Filling Promoter/Partner Details...")
-        promoter_partner.fill_promoter_partner_details(driver)
+        try:
+            promoter_partner.fill_promoter_partner_details(driver)
+            logger.info("✅ Promoter/Partner details filled successfully")
+        except Exception as promoter_error:
+            logger.error(f"❌ Failed to fill promoter/partner details: {promoter_error}")
+            logger.info("🔄 Continuing with automation despite promoter error...")
         
         # Authorized Signatory
         logger.info("Filling Authorized Signatory Details...")
         authorized_signatory.fill_authorized_signatory_details(driver)
-        helper.click_element((By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]")) # Save & Continue
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]", "Authorized Signatory Save & Continue button") # Save & Continue
 
 
         time.sleep(3)
-        helper.click_element((By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div/div/button[2]")) # Save & Continue
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div/div/button[2]", "Principal Place Save & Continue button") # Save & Continue
 
         # Principal Place of Business
         logger.info("Filling Principal Place of Business Details...")
@@ -208,12 +216,14 @@ def run_full_automation(config):
         # Handle map search with better error handling
         try:
             # Search for address
+            time.sleep(3) 
             helper.send_text((By.ID, "onMapSerachId"), principal_details['address_map_search'])
-            time.sleep(3)  # Give more time for search results to load
+             # Give more time for search results to load
             
             # Click on search result
+            time.sleep(3) 
             helper.click_element((By.XPATH, f"//*[text()='{principal_details['address_map_search']}']"))
-            time.sleep(3)  # Wait for map to update
+             # Wait for map to update
             
             # Try to confirm map query with multiple approaches
             logger.info("Attempting to confirm map query...")
@@ -264,7 +274,22 @@ def run_full_automation(config):
         time.sleep(2)
         if principal_details.get('city_town_village'):
             City = principal_details['city_town_village']
-            helper.send_text((By.ID, "loc"), City)
+            try:
+                helper.send_text((By.ID, "loc"), City)
+            except Exception as loc_error:
+                logger.warning(f"Normal send_text failed for 'loc' field, trying JavaScript approach: {loc_error}")
+                try:
+                    # Use JavaScript to handle disabled field
+                    loc_element = driver.find_element(By.ID, "loc")
+                    driver.execute_script("arguments[0].removeAttribute('disabled');", loc_element)
+                    driver.execute_script("arguments[0].removeAttribute('readonly');", loc_element)
+                    driver.execute_script("arguments[0].value = arguments[1];", loc_element, City)
+                    driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", loc_element)
+                    driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", loc_element)
+                    logger.info("✓ City/Town/Village field filled via JavaScript")
+                except Exception as js_error:
+                    logger.error(f"JavaScript approach also failed for 'loc' field: {js_error}")
+                    logger.info("Continuing automation despite 'loc' field failure...")
 
         time.sleep(2)
         if principal_details.get('street'):
@@ -387,7 +412,7 @@ def run_full_automation(config):
                 logger.error(f"Failed to process nature of business item '{item}': {item_error}")
                 continue  # Skip this item and continue with the next one
 
-        helper.click_element((By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div/div/button[2]")) # Save & Continue
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div/div/button[2]", "Nature of Business Save & Continue button") # Save & Continue
 
         # Additional Place of Business (Continue if none)
         time.sleep(1)
@@ -417,7 +442,7 @@ def run_full_automation(config):
         time.sleep(2)
         driver.find_element(By.XPATH, f"//*[text()='{gst_details['hsn_value']}']").click()
         time.sleep(2)
-        helper.click_element((By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/div/button")) # Save & Continue
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div[2]/div/button", "Goods Services Save & Continue button") # Save & Continue
         
 
         time.sleep(1)
@@ -443,7 +468,7 @@ def run_full_automation(config):
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div/div/button", "Form button 2")
 
         time.sleep(3)
-        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/div[2]/div/div/div[2]/button", "Popup button 2")
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/div[2]/div/div/div[2]/button", "Final submission button")
 
         # Final submission steps would continue here...
         logger.info("Automation flow completed successfully!")
@@ -496,6 +521,29 @@ class HealthCheck(Resource):
         return {'status': 'ok', 'message': 'API is running.'}, 200
 
 if __name__ == '__main__':
-    print("Starting GST Automation API on http://localhost:8001")
-    print("Swagger UI is available at http://localhost:8001/docs/")
-    app.run(host='0.0.0.0', port=8001, debug=True)
+    # Check if we should run direct automation or API server (default)
+    import sys
+    
+    if len(sys.argv) > 1 and sys.argv[1] == '--direct':
+        # Run direct automation using config.json
+        print("Running GST automation directly using config.json...")
+        try:
+            with open('config.json', 'r') as f:
+                config = json.load(f)
+            
+            run_full_automation(config)
+            print("✅ GST automation completed successfully!")
+            
+        except FileNotFoundError:
+            print("❌ Error: config.json file not found!")
+            print("Please ensure config.json exists in the same directory.")
+        except Exception as e:
+            print(f"❌ Error during automation: {e}")
+            logger.error(f"Automation failed: {e}")
+            logger.error(traceback.format_exc())
+    else:
+        # Default: Start Flask API server
+        print("Starting GST Automation API on http://localhost:8001")
+        print("Swagger UI is available at http://localhost:8001/docs/")
+        print("To run automation directly, use: python3 app.py --direct")
+        app.run(host='0.0.0.0', port=8001, debug=True)
