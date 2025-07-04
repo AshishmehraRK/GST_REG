@@ -74,11 +74,11 @@
             "state": "KERALA",
             "pincode": "678613",
             "district": "PALAKKAD",
-            "city": "OORANTHODI MANKARA",
+            "city": "Mankarai",
             "locality": "Mankurussi",
-            "street": "2",
+            "street": "Mankurushi Kallur Keralasserry Road",
             "Building": "",
-            "building_flat_door_no": "ANANDHAN",
+            "building_flat_door_no": "12",
             "nearby_landmark": "",
             "document_upload": "/Users/ashishmehra/Desktop/mew2.jpeg",
             "is_also_authorized_signatory": "No"
@@ -86,6 +86,7 @@
     ],
     "authorized_signatory_details": [
         {
+            "is_primary_signatory": "Yes",
             "first_name": "",
             "middle_name": "",
             "last_name": "",
@@ -109,17 +110,17 @@
         }
     ],
     "principal_place_of_business_details": {
-        "address_map_search": "110044",
-        "pincode": "110071",
-        "district": "South West Delhi",
-        "city_town_village": "New Delhi",
+        "address_map_search": "122015",
+        "pincode": "122015",
+        "district": "Gurugram",
+        "city_town_village": "Gurugram",
         "street": "18",
         "building_no": "12",
         "jurisdiction": {
-            "ward": "Ward 1",
-            "commissionerate": "DELHI SOUTH",
-            "division": "DWARKA",
-            "range": "RANGE - 81"
+            "ward": "Gurgaon (East) Ward 6",
+            "commissionerate": "GURUGRAM",
+            "division": "DIVISION-NORTH-1",
+            "range": "R-1"
         },
         "nature_of_possession_of_premises": "Others",
         "document_proof": "Legal ownership document",

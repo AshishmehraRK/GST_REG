@@ -9,6 +9,41 @@ import time
 from logger import logger
 import json
 
+def handle_confirmation_dialog(driver, logger, timeout=10):
+    """
+    Handle confirmation dialogs that appear after clicking buttons.
+    Clicks the Cancel button to dismiss the dialog.
+    Returns True if dialog was handled, False if no dialog appeared.
+    """
+    try:
+        # Wait for the confirmation dialog to appear
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
+        )
+        
+        # Click Cancel button to dismiss the dialog
+        logger.info("🔄 Confirmation dialog detected, clicking Cancel...")
+        cancel_button = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
+        )
+        cancel_button.click()
+        logger.info("✅ Confirmation dialog dismissed by clicking Cancel")
+        
+        # Wait for dialog to disappear
+        WebDriverWait(driver, timeout).until(
+            EC.invisibility_of_element_located((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
+        )
+        
+        return True
+        
+    except TimeoutException:
+        # If no dialog appears within timeout, it's not an error
+        logger.info("ℹ️ No confirmation dialog appeared")
+        return False
+    except Exception as e:
+        logger.warning(f"⚠️ Error handling confirmation dialog: {e}")
+        return False
+
 def wait_for_overlay_to_disappear(driver, timeout=10):
     """Wait for loading overlays or dimmer elements to disappear"""
     try:
@@ -165,8 +200,17 @@ def fill_promoter_partner_details(driver):
         logger.info(f"✅ Multiple promoters detected - 'Add New' will be clicked for promoters 2-{len(promoters_list)}")
 
     for i, promoter_data in enumerate(promoters_list):
-        if i > 0:
-            logger.info(f"Adding new promoter {i+1}...")
+        logger.info(f"Processing promoter {i+1}/{len(promoters_list)}: {promoter_data.get('first_name', 'Unknown')} {promoter_data.get('last_name', 'Unknown')}")
+        
+        # STEP 1: Fill details for current promoter
+        fill_single_promoter_details(driver, nigga, logger, promoter_data)
+        
+        # STEP 2: Check if this is the last promoter
+        is_last_promoter = (i == len(promoters_list) - 1)
+        
+        if not is_last_promoter:
+            # More promoters remaining - click "Add New" to prepare for next promoter
+            logger.info(f"More promoters remaining. Clicking 'Add New' for promoter {i+1}...")
             try:
                 wait_for_overlay_to_disappear(driver)
                 
@@ -182,9 +226,11 @@ def fill_promoter_partner_details(driver):
                     
                     # Check if button is actually visible and enabled
                     if add_new_button.is_displayed() and add_new_button.is_enabled():
-                          add_new_button.click()
-                          logger.info("✅ Successfully clicked 'Add New' button (Strategy 1)")
-                          add_new_clicked = True
+                        add_new_button.click()
+                        logger.info("✅ Successfully clicked 'Add New' button (Strategy 1)")
+                        # Handle confirmation dialog if it appears
+                        handle_confirmation_dialog(driver, logger)
+                        add_new_clicked = True
                     else:
                         logger.warning("⚠️ Button found but not clickable (hidden or disabled)")
                         
@@ -208,6 +254,8 @@ def fill_promoter_partner_details(driver):
                             if add_new_button.is_displayed() and add_new_button.is_enabled():
                                 add_new_button.click()
                                 logger.info(f"✅ Successfully clicked 'Add New' button (Strategy 2: {selector})")
+                                # Handle confirmation dialog if it appears
+                                handle_confirmation_dialog(driver, logger)
                                 add_new_clicked = True
                                 break
                         except Exception as e:
@@ -223,6 +271,8 @@ def fill_promoter_partner_details(driver):
                             if "Add New" in btn.text and btn.is_displayed() and btn.is_enabled():
                                 btn.click()
                                 logger.info(f"✅ Successfully clicked 'Add New' button (Strategy 3: text match)")
+                                # Handle confirmation dialog if it appears
+                                handle_confirmation_dialog(driver, logger)
                                 add_new_clicked = True
                                 break
                     except Exception as e:
@@ -251,6 +301,8 @@ def fill_promoter_partner_details(driver):
                                 if ("Add New" in text or "Add New" in title) and displayed and enabled:
                                     driver.execute_script("arguments[0].click();", btn)
                                     logger.info(f"✅ Successfully clicked 'Add New' button (Strategy 4: JavaScript on button {idx})")
+                                    # Handle confirmation dialog if it appears
+                                    handle_confirmation_dialog(driver, logger)
                                     add_new_clicked = True
                                     break
                             except Exception as debug_error:
@@ -267,12 +319,14 @@ def fill_promoter_partner_details(driver):
                         add_new_button = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[2]")
                         driver.execute_script("arguments[0].click();", add_new_button)
                         logger.info("✅ Successfully clicked 'Add New' button (Strategy 5: Force JavaScript)")
+                        # Handle confirmation dialog if it appears
+                        handle_confirmation_dialog(driver, logger)
                         add_new_clicked = True
                     except Exception as e:
                         logger.warning(f"⚠️ Strategy 5 failed: {e}")
                 
                 if not add_new_clicked:
-                    logger.error(f"❌ All strategies failed to click 'Add New' button for promoter {i+1}")
+                    logger.error(f"❌ All strategies failed to click 'Add New' button after promoter {i+1}")
                     break
                 
                 # Wait for form to be ready for next promoter
@@ -286,167 +340,104 @@ def fill_promoter_partner_details(driver):
                 logger.error(f"Timed out waiting for 'Add New' button or form to clear. Aborting.")
                 break
             except Exception as e:
-                logger.error(f"Error clicking 'Add New': {e}. Aborting.")
+                logger.error(f"Error clicking 'Add New' after promoter {i+1}: {e}. Aborting.")
                 break
         
-        fill_single_promoter_details(driver, nigga, logger, promoter_data)
-        
-        # Click Save & Continue after filling each promoter's details
-        logger.info(f"Attempting to click Save & Continue for promoter {i+1}...")
-        
-        # Try multiple strategies to click the Save & Continue button
-        save_continue_clicked = False
-        
-        # Strategy 1: Try the provided XPath
-        try:
-            wait_for_overlay_to_disappear(driver)
-            button = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[3]"))
-            )
-            button.click()
-            logger.info(f"✅ Save & Continue clicked for promoter {i+1} (Strategy 1)")
-            save_continue_clicked = True
-        except Exception as e:
-            logger.warning(f"⚠️ Strategy 1 failed for promoter {i+1}: {e}")
-        
-        # Strategy 2: Try alternative button XPaths
-        if not save_continue_clicked:
-            alternative_xpaths = [
-                "//button[contains(text(), 'Save & Continue')]",
-                "//button[contains(@class, 'btn') and contains(text(), 'Save')]",
-                "/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[last()]",
-                "//form//button[contains(text(), 'Continue')]"
-            ]
-            
-            for xpath in alternative_xpaths:
-                try:
-                    wait_for_overlay_to_disappear(driver)
-                    button = WebDriverWait(driver, 5).until(
-                        EC.element_to_be_clickable((By.XPATH, xpath))
-                    )
-                    button.click()
-                    logger.info(f"✅ Save & Continue clicked for promoter {i+1} (Strategy 2: {xpath})")
-                    save_continue_clicked = True
-                    break
-                except Exception as e:
-                    logger.warning(f"⚠️ Alternative XPath failed: {xpath} - {e}")
-        
-        # Strategy 3: JavaScript click fallback
-        if not save_continue_clicked:
-            try:
-                # Try to find any Save/Continue button and click with JavaScript
-                button = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[3]")
-                driver.execute_script("arguments[0].scrollIntoView(true);", button)
-                time.sleep(1)
-                driver.execute_script("arguments[0].click();", button)
-                logger.info(f"✅ Save & Continue clicked for promoter {i+1} (Strategy 3: JavaScript)")
-                save_continue_clicked = True
-            except Exception as e:
-                logger.warning(f"⚠️ JavaScript click also failed: {e}")
-        
-        # Strategy 4: Debug - List all buttons to understand the structure
-        if not save_continue_clicked:
-            logger.error(f"❌ All strategies failed for promoter {i+1}. Debugging button structure...")
-            try:
-                buttons = driver.find_elements(By.XPATH, "//button")
-                logger.info(f"Found {len(buttons)} buttons on the page:")
-                for idx, btn in enumerate(buttons):
-                    try:
-                        text = btn.text.strip()
-                        classes = btn.get_attribute("class")
-                        xpath = f"//button[{idx+1}]"
-                        logger.info(f"  Button {idx+1}: '{text}' (class: {classes})")
-                    except:
-                        logger.info(f"  Button {idx+1}: Could not read details")
-                
-                # Try clicking the last button in the form
-                form_buttons = driver.find_elements(By.XPATH, "//form//button")
-                if form_buttons:
-                    last_button = form_buttons[-1]
-                    driver.execute_script("arguments[0].click();", last_button)
-                    logger.info(f"✅ Clicked last form button as fallback")
-                    save_continue_clicked = True
-                    
-            except Exception as debug_error:
-                logger.error(f"❌ Debug attempt failed: {debug_error}")
-        
-        if save_continue_clicked:
-            time.sleep(2)  # Wait for the action to complete
         else:
-            logger.error(f"❌ Could not click Save & Continue for promoter {i+1} - continuing anyway")
-
-    logger.info("All promoters processed. Clicking final Save & Continue button.")
-    
-    # Try multiple strategies to find and click the Save & Continue button
-    save_continue_clicked = False
-    
-    # Strategy 1: Try the original XPath
-    try:
-        wait_for_overlay_to_disappear(driver, 15)
-        final_save_continue_button = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]"))
-        )
-        final_save_continue_button.click()
-        logger.info("✅ Successfully clicked final Save & Continue (Strategy 1)")
-        save_continue_clicked = True
-    except Exception as e:
-        logger.warning(f"⚠️ Strategy 1 failed: {e}")
-    
-    # Strategy 2: Try alternative button selectors
-    if not save_continue_clicked:
-        logger.info("Strategy 2: Trying alternative selectors...")
-        alternative_selectors = [
-            "//button[contains(text(), 'Save & Continue')]",
-            "//button[contains(@class, 'btn') and contains(text(), 'Continue')]",
-            "//button[contains(@class, 'btn') and contains(text(), 'Save')]",
-            "//form//button[last()]",
-            "/html/body/div[2]/div/div/div[3]/form//button[contains(text(), 'Continue')]"
-        ]
-        
-        for selector in alternative_selectors:
+            # This is the last promoter - click "Save & Continue" to move to next section
+            logger.info(f"Last promoter ({i+1}) processed. Clicking 'Save & Continue' to proceed to next section...")
+            
+            # Try multiple strategies to click the Save & Continue button
+            save_continue_clicked = False
+            
+            # Strategy 1: Try the provided XPath
             try:
-                wait_for_overlay_to_disappear(driver, 5)
+                wait_for_overlay_to_disappear(driver)
                 button = WebDriverWait(driver, 10).until(
-                    EC.element_to_be_clickable((By.XPATH, selector))
+                    EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[3]"))
                 )
                 button.click()
-                logger.info(f"✅ Successfully clicked final Save & Continue (Strategy 2: {selector})")
+                logger.info(f"✅ Save & Continue clicked for last promoter (Strategy 1)")
+                # Handle confirmation dialog if it appears
+                handle_confirmation_dialog(driver, logger)
                 save_continue_clicked = True
-                break
             except Exception as e:
-                logger.warning(f"⚠️ Selector {selector} failed: {e}")
-                continue
-    
-    # Strategy 3: Try JavaScript click on any found button
-    if not save_continue_clicked:
-        logger.info("Strategy 3: Trying JavaScript click on found buttons...")
-        try:
-            # Find all buttons and look for Save & Continue
-            buttons = driver.find_elements(By.TAG_NAME, "button")
-            logger.info(f"Found {len(buttons)} buttons on page")
+                logger.warning(f"⚠️ Strategy 1 failed for last promoter: {e}")
             
-            for idx, btn in enumerate(buttons):
-                try:
-                    text = btn.text.strip()
-                    if ("Save" in text and "Continue" in text) or "Continue" in text:
-                        logger.info(f"Attempting to click button {idx}: '{text}'")
-                        driver.execute_script("arguments[0].scrollIntoView(true);", btn)
-                        time.sleep(1)
-                        driver.execute_script("arguments[0].click();", btn)
-                        logger.info(f"✅ Successfully clicked final Save & Continue (Strategy 3: Button {idx})")
+            # Strategy 2: Try alternative button XPaths
+            if not save_continue_clicked:
+                alternative_xpaths = [
+                    "//button[contains(text(), 'Save & Continue')]",
+                    "//button[contains(@class, 'btn') and contains(text(), 'Save')]",
+                    "/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[last()]",
+                    "//form//button[contains(text(), 'Continue')]"
+                ]
+                
+                for xpath in alternative_xpaths:
+                    try:
+                        wait_for_overlay_to_disappear(driver)
+                        button = WebDriverWait(driver, 5).until(
+                            EC.element_to_be_clickable((By.XPATH, xpath))
+                        )
+                        button.click()
+                        logger.info(f"✅ Save & Continue clicked for last promoter (Strategy 2: {xpath})")
+                        # Handle confirmation dialog if it appears
+                        handle_confirmation_dialog(driver, logger)
                         save_continue_clicked = True
                         break
-                except Exception as btn_error:
-                    logger.warning(f"⚠️ Failed to click button {idx}: {btn_error}")
-                    continue
-        except Exception as e:
-            logger.warning(f"⚠️ Strategy 3 failed: {e}")
-    
-    if not save_continue_clicked:
-        logger.error("❌ All strategies failed to click final Save & Continue button")
-        logger.error("The automation may not proceed to the next section properly")
-    else:
-        logger.info("✅ Final Save & Continue button clicked successfully")
+                    except Exception as e:
+                        logger.warning(f"⚠️ Alternative XPath failed: {xpath} - {e}")
+            
+            # Strategy 3: JavaScript click fallback
+            if not save_continue_clicked:
+                try:
+                    # Try to find any Save/Continue button and click with JavaScript
+                    button = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[3]")
+                    driver.execute_script("arguments[0].scrollIntoView(true);", button)
+                    time.sleep(1)
+                    driver.execute_script("arguments[0].click();", button)
+                    logger.info(f"✅ Save & Continue clicked for last promoter (Strategy 3: JavaScript)")
+                    # Handle confirmation dialog if it appears
+                    handle_confirmation_dialog(driver, logger)
+                    save_continue_clicked = True
+                except Exception as e:
+                    logger.warning(f"⚠️ JavaScript click also failed: {e}")
+            
+            # Strategy 4: Debug - List all buttons to understand the structure
+            if not save_continue_clicked:
+                logger.error(f"❌ All strategies failed for last promoter. Debugging button structure...")
+                try:
+                    buttons = driver.find_elements(By.XPATH, "//button")
+                    logger.info(f"Found {len(buttons)} buttons on the page:")
+                    for idx, btn in enumerate(buttons):
+                        try:
+                            text = btn.text.strip()
+                            classes = btn.get_attribute("class")
+                            xpath = f"//button[{idx+1}]"
+                            logger.info(f"  Button {idx+1}: '{text}' (class: {classes})")
+                        except:
+                            logger.info(f"  Button {idx+1}: Could not read details")
+                    
+                    # Try clicking the last button in the form
+                    form_buttons = driver.find_elements(By.XPATH, "//form//button")
+                    if form_buttons:
+                        last_button = form_buttons[-1]
+                        driver.execute_script("arguments[0].click();", last_button)
+                        logger.info(f"✅ Clicked last form button as fallback")
+                        # Handle confirmation dialog if it appears
+                        handle_confirmation_dialog(driver, logger)
+                        save_continue_clicked = True
+                        
+                except Exception as debug_error:
+                    logger.error(f"❌ Debug attempt failed: {debug_error}")
+            
+            if save_continue_clicked:
+                time.sleep(2)  # Wait for the action to complete
+                logger.info("✅ Successfully moved to next section after processing all promoters")
+            else:
+                logger.error(f"❌ Could not click Save & Continue for last promoter - may affect next section")
+
+    logger.info("✅ All promoters processed successfully")
 
 def fill_single_promoter_details(driver, nigga, logger, promoter_data_item):
     """Fills the form fields for a single promoter."""
@@ -573,10 +564,9 @@ def fill_single_promoter_details(driver, nigga, logger, promoter_data_item):
                 time.sleep(2)
                 nigga.send_text((By.ID, "onMapSerachId"), address)
                 logger.info("✓ Address search field filled")
-                time.sleep(2)  # Wait for suggestions to load
                 safe_click(driver, (By.XPATH, f"//*[text()='{address}']"))
                 logger.info("✓ Address suggestion clicked")
-                time.sleep(2)
+                time.sleep(1)
                 safe_click(driver, (By.ID, "confirm-mapquery-btn1"))
                 logger.info("✓ Address confirmation clicked")
         except Exception as e:
@@ -620,7 +610,10 @@ def fill_single_promoter_details(driver, nigga, logger, promoter_data_item):
         # Step 1: Fill PIN code first to trigger auto-population
         logger.info("Step 1: Filling PIN code to trigger auto-population...")
         pin_filled = safe_fill_field(driver, "pncd", promoter_data_item.get('pincode', ''), "PIN Code")
+        time.sleep(2)
+        safe_click(driver, (By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/fieldset/div[5]/div[1]/div/div[2]/div/ul/li"))
         
+        time.sleep(2)
         if pin_filled:
             # Wait for auto-population to complete
             logger.info("⏳ Waiting for auto-population to complete...")
@@ -680,12 +673,13 @@ def fill_single_promoter_details(driver, nigga, logger, promoter_data_item):
             # Step 4: Fill the remaining address fields
             logger.info("Step 4: Filling remaining address fields...")
             safe_fill_field(driver, "pd_locality", promoter_data_item.get('locality', ''), "Locality")
+            time.sleep(0.7)
             safe_fill_field(driver, "pd_road", promoter_data_item.get('street', ''), "Street/Road")
             safe_fill_field(driver, "pd_bdname", promoter_data_item.get('Building', ''), "Building Name")
+            time.sleep(0.7)
             safe_fill_field(driver, "pd_bdnum", promoter_data_item.get('building_flat_door_no', ''), "Building Number")
             safe_fill_field(driver, "pd_flrnum", promoter_data_item.get('floor_number', ''), "Floor Number")
             safe_fill_field(driver, "pd_landmark", promoter_data_item.get('nearby_landmark', ''), "Nearby Landmark")
-            
         else:
             logger.error("❌ PIN code filling failed, skipping address fields")
             

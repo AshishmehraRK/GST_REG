@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, ElementNotInteractableException
+from selenium.common.exceptions import TimeoutException, ElementNotInteractableException, NoSuchElementException
 import time, traceback, json
 from logger import logger
 from functions import AutomationHelper
@@ -43,10 +43,74 @@ response_model = api.model('Response', {
     'traceback': fields.String(description='The full error traceback for debugging purposes')
 })
 
-# --- Helper Function for Dimmer-Safe Clicking ---
-def safe_click_with_dimmer_wait(driver, xpath, description="button"):
+# --- Helper Function for Safe Checkbox Clicking ---
+def safe_checkbox_click(driver, checkbox_id, description="checkbox"):
     """
-    Safely click a button while handling dimmer overlay issues
+    Safely click a checkbox while handling dimmer overlay issues
+    """
+    try:
+        # Wait for any dimmer to disappear first
+        wait = WebDriverWait(driver, 15)
+        wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, "dimmer-holder")))
+        
+        # Wait for checkbox to be clickable
+        checkbox = wait.until(EC.element_to_be_clickable((By.ID, checkbox_id)))
+        checkbox.click()
+        logger.info(f"{description} ({checkbox_id}) clicked successfully")
+        return True
+        
+    except (TimeoutException, Exception) as e:
+        logger.warning(f"Normal {description} click failed, trying JavaScript click: {e}")
+        try:
+            # Fallback: JavaScript click
+            checkbox = driver.find_element(By.ID, checkbox_id)
+            driver.execute_script("arguments[0].click();", checkbox)
+            logger.info(f"{description} ({checkbox_id}) clicked with JavaScript")
+            return True
+        except Exception as js_error:
+            logger.error(f"All {description} click methods failed: {js_error}")
+            return False
+
+# --- Helper Function for Confirmation Dialog Handling ---
+def handle_confirmation_dialog(driver, logger, timeout=10):
+    """
+    Handle confirmation dialogs that appear after clicking buttons.
+    Clicks the Cancel button to dismiss the dialog.
+    Returns True if dialog was handled, False if no dialog appeared.
+    """
+    try:
+        # Wait for the confirmation dialog to appear
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
+        )
+        
+        # Click Cancel button to dismiss the dialog
+        logger.info("🔄 Confirmation dialog detected, clicking Cancel...")
+        cancel_button = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
+        )
+        cancel_button.click()
+        logger.info("✅ Confirmation dialog dismissed by clicking Cancel")
+        
+        # Wait for dialog to disappear
+        WebDriverWait(driver, timeout).until(
+            EC.invisibility_of_element_located((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
+        )
+        
+        return True
+        
+    except TimeoutException:
+        # If no dialog appears within timeout, it's not an error
+        logger.info("ℹ️ No confirmation dialog appeared")
+        return False
+    except Exception as e:
+        logger.warning(f"⚠️ Error handling confirmation dialog: {e}")
+        return False
+
+# --- Helper Function for Dimmer-Safe Clicking ---
+def safe_click_with_dimmer_wait(driver, xpath, description="button", handle_dialog=True):
+    """
+    Safely click a button while handling dimmer overlay issues and confirmation dialogs
     """
     try:
         # Wait for any dimmer to disappear
@@ -57,6 +121,11 @@ def safe_click_with_dimmer_wait(driver, xpath, description="button"):
         button = wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
         button.click()
         logger.info(f"{description} clicked successfully")
+        
+        # Handle confirmation dialog if it appears
+        if handle_dialog:
+            handle_confirmation_dialog(driver, logger)
+        
         return True
         
     except (TimeoutException, Exception) as e:
@@ -66,6 +135,11 @@ def safe_click_with_dimmer_wait(driver, xpath, description="button"):
             button = driver.find_element(By.XPATH, xpath)
             driver.execute_script("arguments[0].click();", button)
             logger.info(f"{description} clicked with JavaScript")
+            
+            # Handle confirmation dialog if it appears
+            if handle_dialog:
+                handle_confirmation_dialog(driver, logger)
+            
             return True
         except Exception as js_error:
             logger.error(f"All click methods failed for {description}: {js_error}")
@@ -112,7 +186,7 @@ def run_full_automation(config):
         helper.send_text((By.ID, "mobile"), registration['mobile_number'])
         helper.solve_and_enter_captcha()
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button", "Submit button")
-        time.sleep(2)
+        time.sleep(0.7)
         safe_click_with_dimmer_wait(driver, "/html/body/table-view/div/div/div/div/div[2]/a[2]", "Continue link")
 
         # 2. Handle Mobile and Email OTP
@@ -180,28 +254,92 @@ def run_full_automation(config):
         
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[4]/button[1]", "Business details Save & Continue button") # Save & Continue
 
-        # Handle Registration Certificate Upload
+        # Handle Registration Certificate Upload with validation and error handling
         helper.click_element((By.XPATH, f"//*[text()='{business_details['Proof_of_Constitution_of_Business']}']"))
         time.sleep(2)
         
+        # Business Constitution Proof Upload
         if business_details.get('proof_of_consititution'):
-            driver.find_element(By.CSS_SELECTOR,"data-file-model.ng-pristine:nth-child(4) > input:nth-child(1)").send_keys(business_details['proof_of_consititution'])
+            proof_file = business_details['proof_of_consititution']
+            logger.info(f"📄 Processing business constitution proof document: {proof_file}")
+            
+            # File existence validation
+            import os
+            if not os.path.exists(proof_file):
+                logger.error(f"❌ Business proof document file not found: {proof_file}")
+                logger.warning("⚠️ Skipping business proof upload - file does not exist")
+            elif not os.path.isfile(proof_file):
+                logger.error(f"❌ Business proof document path is not a file: {proof_file}")
+                logger.warning("⚠️ Skipping business proof upload - path is not a valid file")
+            else:
+                # File exists, proceed with upload
+                logger.info(f"✓ Business proof document file validated: {proof_file}")
+                try:
+                    upload_element = driver.find_element(By.CSS_SELECTOR,"data-file-model.ng-pristine:nth-child(4) > input:nth-child(1)")
+                    upload_element.send_keys(proof_file)
+                    logger.info("✅ Business constitution proof document uploaded successfully")
+                    
+                except NoSuchElementException:
+                    logger.error("❌ Business proof upload field not found (CSS selector: data-file-model.ng-pristine:nth-child(4) > input:nth-child(1))")
+                    
+                except ElementNotInteractableException:
+                    logger.error("❌ Business proof upload field not interactable - may be disabled or hidden")
+                    
+                except PermissionError:
+                    logger.error(f"❌ Permission denied accessing business proof file: {proof_file}")
+                    
+                except Exception as upload_error:
+                    logger.error(f"❌ Unexpected error during business proof upload: {type(upload_error).__name__}: {upload_error}")
+        else:
+            logger.info("ℹ️ No business proof document specified in config - skipping upload")
         
         time.sleep(2)
         driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div/div/button[2]").click()
 
-        # Promoter/Partner Details
-        logger.info("Filling Promoter/Partner Details...")
+        # Promoter/Partner Details with enhanced error handling
+        logger.info("📋 Starting Promoter/Partner Details processing...")
         try:
             promoter_partner.fill_promoter_partner_details(driver)
             logger.info("✅ Promoter/Partner details filled successfully")
+            
+        except TimeoutException as timeout_error:
+            logger.error(f"⏰ Timeout occurred while filling promoter/partner details: {timeout_error}")
+            logger.warning("🔄 Continuing with automation despite timeout - promoter section may be incomplete")
+            
+        except NoSuchElementException as element_error:
+            logger.error(f"🔍 Required element not found in promoter/partner section: {element_error}")
+            logger.warning("🔄 Continuing with automation despite missing element")
+            
+        except ElementNotInteractableException as interaction_error:
+            logger.error(f"🚫 Element not interactable in promoter/partner section: {interaction_error}")
+            logger.warning("🔄 Continuing with automation despite interaction issue")
+            
         except Exception as promoter_error:
-            logger.error(f"❌ Failed to fill promoter/partner details: {promoter_error}")
-            logger.info("🔄 Continuing with automation despite promoter error...")
+            logger.error(f"❌ Unexpected error in promoter/partner details: {type(promoter_error).__name__}: {promoter_error}")
+            logger.warning("🔄 Continuing with automation despite promoter error...")
         
-        # Authorized Signatory
-        logger.info("Filling Authorized Signatory Details...")
-        authorized_signatory.fill_authorized_signatory_details(driver)
+        # Authorized Signatory with enhanced error handling
+        logger.info("📋 Starting Authorized Signatory Details processing...")
+        try:
+            authorized_signatory.fill_authorized_signatory_details(driver)
+            logger.info("✅ Authorized Signatory details filled successfully")
+            
+        except TimeoutException as timeout_error:
+            logger.error(f"⏰ Timeout occurred while filling authorized signatory details: {timeout_error}")
+            logger.warning("🔄 Continuing with automation despite timeout - signatory section may be incomplete")
+            
+        except NoSuchElementException as element_error:
+            logger.error(f"🔍 Required element not found in authorized signatory section: {element_error}")
+            logger.warning("🔄 Continuing with automation despite missing element")
+            
+        except ElementNotInteractableException as interaction_error:
+            logger.error(f"🚫 Element not interactable in authorized signatory section: {interaction_error}")
+            logger.warning("🔄 Continuing with automation despite interaction issue")
+            
+        except Exception as signatory_error:
+            logger.error(f"❌ Unexpected error in authorized signatory details: {type(signatory_error).__name__}: {signatory_error}")
+            logger.warning("🔄 Continuing with automation despite signatory error...")
+            
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]", "Authorized Signatory Save & Continue button") # Save & Continue
 
 
@@ -340,15 +478,83 @@ def run_full_automation(config):
             principal_place = principal_details['document_proof']
             helper.click_element((By.XPATH, f"//*[text()='{principal_place}']"))
 
-        # Handle document upload
-        time.sleep(2)
+        # Principal Place Document Uploads with validation and error handling
+        logger.info("📁 Starting principal place document upload process...")
+        
+        # First document upload
         if principal_details.get('document_upload'):
-            driver.find_element(By.XPATH,'//*[@id="bp_upload"]').send_keys(principal_details['document_upload'])
+            document1 = principal_details['document_upload']
+            logger.info(f"📄 Processing principal place document 1: {document1}")
+            
+            # File existence validation
+            import os
+            if not os.path.exists(document1):
+                logger.error(f"❌ Principal place document 1 file not found: {document1}")
+                logger.warning("⚠️ Skipping document 1 upload - file does not exist")
+            elif not os.path.isfile(document1):
+                logger.error(f"❌ Principal place document 1 path is not a file: {document1}")
+                logger.warning("⚠️ Skipping document 1 upload - path is not a valid file")
+            else:
+                # File exists, proceed with upload
+                logger.info(f"✓ Principal place document 1 file validated: {document1}")
+                try:
+                    upload_element = driver.find_element(By.XPATH,'//*[@id="bp_upload"]')
+                    upload_element.send_keys(document1)
+                    logger.info("✅ Principal place document 1 uploaded successfully")
+                    
+                except NoSuchElementException:
+                    logger.error("❌ Principal place upload field not found (XPath: //*[@id='bp_upload'])")
+                    
+                except ElementNotInteractableException:
+                    logger.error("❌ Principal place upload field not interactable - may be disabled or hidden")
+                    
+                except PermissionError:
+                    logger.error(f"❌ Permission denied accessing principal place document 1: {document1}")
+                    
+                except Exception as upload_error:
+                    logger.error(f"❌ Unexpected error during principal place document 1 upload: {type(upload_error).__name__}: {upload_error}")
+        else:
+            logger.info("ℹ️ No principal place document 1 specified in config - skipping upload")
 
         time.sleep(2)
-        if principal_details.get('document_upload_2'):
-            driver.find_element(By.ID,'bp_upload').send_keys(principal_details['document_upload_2'])
         
+        # Second document upload
+        if principal_details.get('document_upload_2'):
+            document2 = principal_details['document_upload_2']
+            logger.info(f"📄 Processing principal place document 2: {document2}")
+            
+            # File existence validation
+            import os
+            if not os.path.exists(document2):
+                logger.error(f"❌ Principal place document 2 file not found: {document2}")
+                logger.warning("⚠️ Skipping document 2 upload - file does not exist")
+            elif not os.path.isfile(document2):
+                logger.error(f"❌ Principal place document 2 path is not a file: {document2}")
+                logger.warning("⚠️ Skipping document 2 upload - path is not a valid file")
+            else:
+                # File exists, proceed with upload
+                logger.info(f"✓ Principal place document 2 file validated: {document2}")
+                try:
+                    upload_element = driver.find_element(By.ID,'bp_upload')
+                    upload_element.send_keys(document2)
+                    logger.info("✅ Principal place document 2 uploaded successfully")
+                    
+                except NoSuchElementException:
+                    logger.error("❌ Principal place upload field not found (ID: bp_upload)")
+                    
+                except ElementNotInteractableException:
+                    logger.error("❌ Principal place upload field not interactable - may be disabled or hidden")
+                    
+                except PermissionError:
+                    logger.error(f"❌ Permission denied accessing principal place document 2: {document2}")
+                    
+                except Exception as upload_error:
+                    logger.error(f"❌ Unexpected error during principal place document 2 upload: {type(upload_error).__name__}: {upload_error}")
+        else:
+            logger.info("ℹ️ No principal place document 2 specified in config - skipping upload")
+            
+        logger.info("📁 Principal place document upload process completed")
+
         # Nature of Business with robust error handling
         nature_list = principal_details.get("nature_of_business", [])
         logger.info(f"Processing {len(nature_list)} nature of business items: {nature_list}")
@@ -445,30 +651,31 @@ def run_full_automation(config):
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div[2]/div/button", "Goods Services Save & Continue button") # Save & Continue
         
 
-        time.sleep(1)
-        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div/div[2]/div/button[2]", "Additional form continue button")
 
-        time.sleep(2)
         safe_click_with_dimmer_wait(driver, "//*[@type='submit']", "Submit button")
 
+        # Checkbox click with dimmer protection
+        safe_checkbox_click(driver, "chkboxop0", "Agreement checkbox")
 
-        # Pop Up handling with dimmer safety
-        # time.sleep(3)
-        # safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/div[2]/div/div/div[2]/button", "Popup button 1")
+        ## GOOD AND SERVICE SAVE AND CONTINUE
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div/div/button", "Final submission button") # Save & Continue
 
-        # time.sleep(3)
-        # safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div[2]/div/div/button", "Form button 1")
 
-        time.sleep(3)
-        # Checkbox click - usually doesn't need dimmer protection
-        driver.find_element(By.ID, "chkboxop0").click()
-        logger.info("Checkbox chkboxop0 clicked")
+        ## Pop Up
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/div[2]/div/div/div[2]/button", "Pop Up button") # Save & Continue
 
-        time.sleep(3)
-        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div/div/button", "Form button 2")
+        # Check BOX
+        safe_checkbox_click(driver, "authveri", "Here BY")
 
-        time.sleep(3)
-        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/div[2]/div/div/div[2]/button", "Final submission button")
+        ## Name of Authorized Signatory
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div[2]/fieldset/div[2]/div/div[1]/select/option[2]", "Name of Authorized Signatory")
+
+        ## Place
+        
+        helper.send_text((By.ID, "veriPlace"), "India")
+
+        ## Submit Button
+        safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[1]/div/div/fieldset/span/button", "Submit button") # Save & Continue
 
         # Final submission steps would continue here...
         logger.info("Automation flow completed successfully!")
@@ -480,9 +687,10 @@ def run_full_automation(config):
         raise
 
     finally:
-        logger.info("Automation process finished. Browser will close in 30 seconds.")
-        time.sleep(30)
-        driver.quit()
+        logger.info("🎉 Automation process finished. Browser will remain open for your review.")
+        logger.info("ℹ️ You can now manually review the filled form and submit it when ready.")
+        logger.info("🌐 To close the browser, simply close the browser window manually.")
+        # driver.quit()  # Browser will stay open for user review
 
 # --- API Endpoints ---
 @api.route('/automate-gst-registration')
