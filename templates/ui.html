@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GST Registration Automation UI</title>
+
+    <style>
+        /* Gothic Dark Theme */
+
+        body {
+
+            font-family: 'Times New Roman', serif;
+            /* A classic, slightly formal font */
+
+            background-color: #1a1a1a;
+            /* Very dark background */
+
+            color: #e0e0e0;
+            /* Light gray text for contrast */
+
+            margin: 0;
+
+            padding: 0;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            min-height: 100vh;
+
+            overflow-y: auto;
+            /* Allow scrolling if content is larger */
+
+        }
+
+
+
+        .container {
+
+            display: flex;
+
+            width: 90vw;
+            /* Responsive width */
+
+            min-height: 90vh;
+            /* Minimum responsive height */
+
+            background-color: #2b2b2b;
+            /* Slightly lighter dark for inner sections */
+
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+            /* Darker shadow for depth */
+
+            border: 1px solid #444;
+            /* Subtle border */
+
+        }
+
+
+
+        .left-panel,
+        .right-panel {
+
+            flex: 1;
+
+            padding: 20px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            box-sizing: border-box;
+
+        }
+
+
+
+        .left-panel {
+
+            border-right: 1px solid #444;
+            /* Separator line */
+
+            justify-content: space-between;
+            /* Push button to bottom */
+
+        }
+
+
+
+        .right-panel {
+
+            justify-content: flex-start;
+
+            align-items: center;
+
+            gap: 20px;
+            /* Add space between OTP sections */
+
+        }
+
+
+
+        h1 {
+
+            text-align: center;
+
+            color: #f0f0f0;
+            /* Brighter text for headings */
+
+            margin-bottom: 20px;
+
+            font-size: 2em;
+
+            letter-spacing: 2px;
+            /* Spacing for gothic feel */
+
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            /* Shadow for gothic depth */
+
+        }
+
+
+
+        textarea {
+
+            width: 100%;
+
+            height: calc(100% - 60px);
+            /* Adjust height for button below */
+
+            background-color: #3a3a3a;
+            /* Darker input field */
+
+            color: #e0e0e0;
+
+            border: 1px solid #555;
+
+            padding: 15px;
+
+            font-size: 1em;
+
+            resize: vertical;
+            /* Allow vertical resize only */
+
+            box-sizing: border-box;
+
+        }
+
+
+
+        .gothic-button {
+
+            background-color: #4a0000;
+            /* Dark red/maroon */
+
+            color: #f0f0f0;
+
+            border: 2px solid #8b0000;
+            /* Darker red border */
+
+            padding: 12px 25px;
+
+            font-size: 1.1em;
+
+            cursor: pointer;
+
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.5px;
+
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.6);
+            /* Raised effect */
+
+            margin-top: 15px;
+
+            align-self: flex-start;
+            /* Align to the left in left-panel */
+
+        }
+
+
+
+        .gothic-button:hover {
+
+            background-color: #6a0000;
+            /* Lighter red on hover */
+
+            border-color: #ff0000;
+            /* Brighter red border on hover */
+
+        }
+
+
+
+        .otp-bar {
+
+            width: 100%;
+
+            background-color: #4a0000;
+            /* Matches button color */
+
+            color: #f0f0f0;
+
+            padding: 15px 0;
+
+            text-align: center;
+
+            font-size: 1.8em;
+
+            font-weight: bold;
+
+            letter-spacing: 3px;
+
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+
+            margin-bottom: 20px;
+
+        }
+
+
+
+        .otp-section {
+
+            width: 80%;
+            /* Width for OTP sections */
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            gap: 15px;
+            /* Space between elements */
+
+            margin-bottom: 30px;
+            /* Space between different OTP sections */
+
+            padding: 20px;
+
+            background-color: #333;
+            /* Slightly different background for sections */
+
+            border: 1px solid #555;
+
+            border-radius: 5px;
+
+        }
+
+
+
+        .otp-section h3 {
+
+            color: #f0f0f0;
+
+            margin: 0 0 10px 0;
+
+            font-size: 1.3em;
+
+            letter-spacing: 1px;
+
+            text-align: center;
+
+        }
+
+
+
+        .otp-section input[type="text"] {
+
+            width: 100%;
+
+            padding: 15px;
+
+            background-color: #3a3a3a;
+
+            color: #e0e0e0;
+
+            border: 1px solid #555;
+
+            font-size: 1.2em;
+
+            text-align: center;
+            /* Center OTP text */
+
+            box-sizing: border-box;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="left-panel">
+
+            <textarea id="jsonInput"
+                placeholder='Enter your JSON payload here, e.g., {"initial_registration_details": {...}, "business_details": {...}}'></textarea>
+
+            <button id="executeButton" class="gothic-button">Execute GST Registration</button>
+
+        </div>
+
+        <div class="right-panel">
+
+            <div class="otp-bar">
+
+                GST REGISTRATION
+
+            </div>
+
+            <!-- Mobile OTP Section -->
+            <div class="otp-section">
+
+                <h3>Mobile OTP</h3>
+
+                <input type="text" id="mobileOtpInput" placeholder="Enter Mobile OTP">
+
+                <button id="submitMobileOtpButton" class="gothic-button">Submit Mobile OTP</button>
+
+            </div>
+
+            <!-- Email OTP Section -->
+            <div class="otp-section">
+
+                <h3>Email OTP</h3>
+
+                <input type="text" id="emailOtpInput" placeholder="Enter Email OTP">
+
+                <button id="submitEmailOtpButton" class="gothic-button">Submit Email OTP</button>
+
+            </div>
+
+            <!-- TRN OTP Section -->
+            <div class="otp-section">
+
+                <h3>TRN OTP</h3>
+
+                <input type="text" id="trnOtpInput" placeholder="Enter TRN OTP">
+
+                <button id="submitTrnOtpButton" class="gothic-button">Submit TRN OTP</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        document.getElementById('executeButton').addEventListener('click', async () => {
+
+            const jsonPayload = document.getElementById('jsonInput').value;
+
+            try {
+
+                const parsedPayload = JSON.parse(jsonPayload);
+
+                console.log('Sending JSON payload:', parsedPayload);
+
+
+
+                // Replace with your actual main automation API endpoint
+
+                const response = await fetch('http://localhost:8001/api/v1/automate-gst-registration', {
+
+                    method: 'POST',
+
+                    headers: {
+
+                        'Content-Type': 'application/json'
+
+                    },
+
+                    body: JSON.stringify(parsedPayload)
+
+                });
+
+
+
+                const result = await response.json();
+
+                console.log('API Response:', result);
+
+                alert('Registration process initiated. Check console for details or follow your automation\'s browser window for OTP.'); // Basic feedback
+
+            } catch (error) {
+
+                console.error('Error sending JSON payload:', error);
+
+                alert('Invalid JSON or API call failed: ' + error.message);
+
+            }
+
+        });
+
+
+
+        // Mobile OTP submission
+        document.getElementById('submitMobileOtpButton').addEventListener('click', async () => {
+
+            const otp = document.getElementById('mobileOtpInput').value;
+
+            if (!otp) {
+
+                alert('Please enter Mobile OTP.');
+
+                return;
+
+            }
+
+            console.log('Submitting Mobile OTP:', otp);
+
+
+
+            try {
+
+                const response = await fetch('http://localhost:3000/submit-mobile-otp', {
+
+                    method: 'POST',
+
+                    headers: {
+
+                        'Content-Type': 'application/json'
+
+                    },
+
+                    body: JSON.stringify({ mobile_otp: otp })
+
+                });
+
+
+
+                const result = await response.json();
+
+                console.log('Mobile OTP Submission Response:', result);
+
+                if (response.ok) {
+
+                    alert('Mobile OTP submitted successfully!');
+
+                    document.getElementById('mobileOtpInput').value = ''; // Clear OTP field
+
+                } else {
+
+                    alert('Failed to submit Mobile OTP: ' + (result.message || 'Unknown error'));
+
+                }
+
+            } catch (error) {
+
+                console.error('Error submitting Mobile OTP:', error);
+
+                alert('Mobile OTP submission failed: ' + error.message);
+
+            }
+
+        });
+
+
+
+        // Email OTP submission
+        document.getElementById('submitEmailOtpButton').addEventListener('click', async () => {
+
+            const otp = document.getElementById('emailOtpInput').value;
+
+            if (!otp) {
+
+                alert('Please enter Email OTP.');
+
+                return;
+
+            }
+
+            console.log('Submitting Email OTP:', otp);
+
+
+
+            try {
+
+                const response = await fetch('http://localhost:3000/submit-email-otp', {
+
+                    method: 'POST',
+
+                    headers: {
+
+                        'Content-Type': 'application/json'
+
+                    },
+
+                    body: JSON.stringify({ email_otp: otp })
+
+                });
+
+
+
+                const result = await response.json();
+
+                console.log('Email OTP Submission Response:', result);
+
+                if (response.ok) {
+
+                    alert('Email OTP submitted successfully!');
+
+                    document.getElementById('emailOtpInput').value = ''; // Clear OTP field
+
+                } else {
+
+                    alert('Failed to submit Email OTP: ' + (result.message || 'Unknown error'));
+
+                }
+
+            } catch (error) {
+
+                console.error('Error submitting Email OTP:', error);
+
+                alert('Email OTP submission failed: ' + error.message);
+
+            }
+
+        });
+
+
+
+        // TRN OTP submission
+        document.getElementById('submitTrnOtpButton').addEventListener('click', async () => {
+
+            const otp = document.getElementById('trnOtpInput').value;
+
+            if (!otp) {
+
+                alert('Please enter TRN OTP.');
+
+                return;
+
+            }
+
+            console.log('Submitting TRN OTP:', otp);
+
+
+
+            try {
+
+                const response = await fetch('http://localhost:3000/submit-trn', {
+
+                    method: 'POST',
+
+                    headers: {
+
+                        'Content-Type': 'application/json'
+
+                    },
+
+                    body: JSON.stringify({ trn: otp })
+
+                });
+
+
+
+                const result = await response.json();
+
+                console.log('TRN OTP Submission Response:', result);
+
+                if (response.ok) {
+
+                    alert('TRN OTP submitted successfully!');
+
+                    document.getElementById('trnOtpInput').value = ''; // Clear OTP field
+
+                } else {
+
+                    alert('Failed to submit TRN OTP: ' + (result.message || 'Unknown error'));
+
+                }
+
+            } catch (error) {
+
+                console.error('Error submitting TRN OTP:', error);
+
+                alert('TRN OTP submission failed: ' + error.message);
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
