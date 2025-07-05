@@ -193,17 +193,20 @@ def safe_click(driver, locator, timeout=10):
         return False
 
 def safe_fill_field(driver, field_id, value, field_name):
-    """Safely fill a form field, handling disabled/readonly states"""
+    """Safely fill a field only if it has a value, with enhanced error handling and logging"""
     try:
-        if not value:
+        if not value or str(value).strip() == "":
             logger.info(f"⏭️ Skipping {field_name} - no value provided")
             return True
             
         element = driver.find_element(By.ID, field_id)
         
-        # Scroll element into view
+        # Scroll element into view and wait for it to be stable
         driver.execute_script("arguments[0].scrollIntoView(true);", element)
-        time.sleep(0.5)
+        # Wait for element to be stable after scrolling instead of arbitrary sleep
+        WebDriverWait(driver, 5).until(
+            lambda d: d.find_element(By.ID, field_id).is_displayed()
+        )
         
         # Check current value - if already filled (auto-populated), don't override
         current_value = element.get_attribute("value")
@@ -360,18 +363,53 @@ def wait_for_element_stable(driver, locator, timeout=10):
             EC.visibility_of_element_located(locator)
         )
         
-        # Check element stability by comparing position twice
-        initial_location = element.location
-        time.sleep(0.1)  # Small check interval
-        final_location = element.location
+        # Enhanced stability check - wait for element position to stabilize
+        max_stability_checks = 3
+        stable_count = 0
         
-        if initial_location == final_location:
-            logger.debug(f"✅ Element {locator} is stable and ready")
-            return element
-        else:
-            logger.debug(f"⚠️ Element {locator} still moving, waiting...")
-            time.sleep(0.5)
-            return wait_for_element_stable(driver, locator, timeout-1)
+        previous_location = element.location
+        previous_size = element.size
+        
+        for check in range(max_stability_checks):
+            try:
+                # Use WebDriverWait with a very short timeout instead of time.sleep
+                WebDriverWait(driver, 0.2).until(
+                    lambda d: d.find_element(*locator).is_displayed()
+                )
+                
+                current_element = driver.find_element(*locator)
+                current_location = current_element.location
+                current_size = current_element.size
+                
+                # Check if position and size are stable
+                if (current_location == previous_location and 
+                    current_size == previous_size and
+                    current_element.is_displayed() and
+                    current_element.is_enabled()):
+                    stable_count += 1
+                    if stable_count >= 2:  # Require 2 consecutive stable checks
+                        logger.debug(f"✅ Element {locator} is stable and ready")
+                        return current_element
+                else:
+                    stable_count = 0  # Reset if element changed
+                    
+                previous_location = current_location
+                previous_size = current_size
+                
+            except (StaleElementReferenceException, NoSuchElementException):
+                # Element is still changing, wait a bit more
+                logger.debug(f"⚠️ Element {locator} still changing, continuing stability check...")
+                stable_count = 0
+                try:
+                    element = driver.find_element(*locator)
+                    previous_location = element.location
+                    previous_size = element.size
+                except:
+                    pass
+        
+        # If we get here, element might still be moving but we'll return it anyway
+        logger.debug(f"⚠️ Element {locator} stability check completed (may still be moving)")
+        return driver.find_element(*locator)
             
     except TimeoutException:
         logger.warning(f"⚠️ Element {locator} not stable within {timeout}s")
@@ -753,7 +791,13 @@ class AutomationHelper:
                 return
             except StaleElementReferenceException:
                 self.logger.warning(f"Stale element on send_text to {locator}, attempt {attempt + 1}.")
-                time.sleep(1)
+                # Wait for element to become stable again instead of arbitrary sleep
+                try:
+                    WebDriverWait(self.driver, 2).until(
+                        EC.visibility_of_element_located(locator)
+                    )
+                except TimeoutException:
+                    pass  # Element might still be stale, will retry in next iteration
             except TimeoutException:
                 self.logger.error(f"Element {locator} not visible within {wait_time}s.")
                 break
@@ -775,7 +819,13 @@ class AutomationHelper:
                 return
             except StaleElementReferenceException:
                 self.logger.warning(f"Stale element on click_element {locator}, attempt {attempt + 1}.")
-                time.sleep(1)
+                # Wait for element to become clickable again instead of arbitrary sleep
+                try:
+                    WebDriverWait(self.driver, 2).until(
+                        EC.element_to_be_clickable(locator)
+                    )
+                except TimeoutException:
+                    pass  # Element might still be stale, will retry in next iteration
             except TimeoutException:
                 self.logger.error(f"Element {locator} not clickable within {wait_time}s.")
                 break
@@ -801,7 +851,24 @@ class AutomationHelper:
                     self.logger.warning(f"FAILURE: {step_name} failed on attempt {attempt + 1}. Retrying...")
             except Exception as e:
                 self.logger.warning(f"Caught exception during {step_name} attempt {attempt + 1}: {type(e).__name__}. Retrying...")
-            time.sleep(2)
+            
+            # Wait for page to be ready before retrying instead of arbitrary sleep
+            if attempt < num_retries - 1:  # Don't wait after the last attempt
+                try:
+                    # Wait for document to be ready and any ongoing processes to complete
+                    WebDriverWait(self.driver, 3).until(
+                        lambda d: d.execute_script("return document.readyState") == "complete"
+                    )
+                    # Also wait for any AJAX calls to complete
+                    try:
+                        WebDriverWait(self.driver, 2).until(
+                            lambda d: d.execute_script("return typeof jQuery !== 'undefined' ? jQuery.active === 0 : true")
+                        )
+                    except:
+                        pass  # jQuery might not be available
+                except TimeoutException:
+                    pass  # Continue anyway if document doesn't stabilize
+        
         self.logger.critical(f"FINAL FAILURE: {step_name} failed after {num_retries} attempts.")
         self._save_screenshot_on_error(step_name)
         raise VerificationStepFailed(f"{step_name} could not be completed after {num_retries} attempts.")
@@ -859,6 +926,9 @@ class AutomationHelper:
         self._update_task_state(f"awaiting_{otp_type}")
         self.logger.info(f"Polling for {otp_type} from OTP server (timeout: {timeout}s)...")
         start_time = time.time()
+        consecutive_failures = 0
+        max_consecutive_failures = 3
+        
         while time.time() - start_time < timeout:
             try:
                 url = f"{OTP_SERVER_URL}/get-otp?type={otp_type}"
@@ -870,9 +940,41 @@ class AutomationHelper:
                     if otp_value:
                         self.logger.info(f"OTP '{otp_value}' received for type '{otp_type}'!")
                         return otp_value
+                    consecutive_failures = 0  # Reset failure count on successful connection
+                else:
+                    consecutive_failures += 1
+                    
             except requests.exceptions.RequestException:
-                self.logger.warning(f"Could not connect to OTP server. Retrying...")
-            time.sleep(poll_interval)
+                consecutive_failures += 1
+                self.logger.warning(f"Could not connect to OTP server. Retrying... (failure #{consecutive_failures})")
+            
+            # Adaptive wait time - increase interval if there are consecutive failures
+            current_interval = poll_interval
+            if consecutive_failures >= max_consecutive_failures:
+                current_interval = min(poll_interval * 2, 10)  # Cap at 10 seconds
+                self.logger.info(f"Increasing poll interval to {current_interval}s due to connection issues")
+            
+            # Use WebDriverWait-based approach instead of time.sleep for better integration
+            end_wait_time = time.time() + current_interval
+            while time.time() < end_wait_time:
+                try:
+                    # Check if browser is still alive during waiting
+                    self.driver.current_url  # This will throw if browser is closed
+                    # Short wait increment to allow for interruption
+                    remaining_wait = end_wait_time - time.time()
+                    if remaining_wait > 0:
+                        wait_increment = min(0.5, remaining_wait)
+                        try:
+                            WebDriverWait(self.driver, wait_increment).until(
+                                lambda d: False  # This will always timeout, giving us controlled wait
+                            )
+                        except TimeoutException:
+                            pass  # Expected timeout for our wait mechanism
+                except Exception:
+                    # Browser might be closed or in bad state
+                    self.logger.warning("Browser connection lost during OTP polling")
+                    break
+                    
         raise TimeoutException(f"Timed out waiting for {otp_type} from local server.")
 
     def handle_initial_captcha(self):
