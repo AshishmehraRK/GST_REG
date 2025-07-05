@@ -4,170 +4,23 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException
 from selenium.webdriver.firefox.options import Options
-from functions import AutomationHelper
+from functions import (
+    AutomationHelper,
+    handle_confirmation_dialog,
+    wait_for_overlay_to_disappear,
+    safe_click,
+    safe_fill_field,
+    wait_for_page_load,
+    wait_for_form_ready,
+    wait_for_ajax_complete,
+    wait_for_element_stable,
+    smart_wait_and_click
+)
 import time
 from logger import logger
 import json
 
-def handle_confirmation_dialog(driver, logger, timeout=10):
-    """
-    Handle confirmation dialogs that appear after clicking buttons.
-    Clicks the Cancel button to dismiss the dialog.
-    Returns True if dialog was handled, False if no dialog appeared.
-    """
-    try:
-        # Wait for the confirmation dialog to appear
-        WebDriverWait(driver, timeout).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
-        )
-        
-        # Click Cancel button to dismiss the dialog
-        logger.info("🔄 Confirmation dialog detected, clicking Cancel...")
-        cancel_button = WebDriverWait(driver, timeout).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
-        )
-        cancel_button.click()
-        logger.info("✅ Confirmation dialog dismissed by clicking Cancel")
-        
-        # Wait for dialog to disappear
-        WebDriverWait(driver, timeout).until(
-            EC.invisibility_of_element_located((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
-        )
-        
-        return True
-        
-    except TimeoutException:
-        # If no dialog appears within timeout, it's not an error
-        logger.info("ℹ️ No confirmation dialog appeared")
-        return False
-    except Exception as e:
-        logger.warning(f"⚠️ Error handling confirmation dialog: {e}")
-        return False
-
-def wait_for_overlay_to_disappear(driver, timeout=10):
-    """Wait for loading overlays or dimmer elements to disappear"""
-    try:
-        # Wait for common overlay/dimmer elements to disappear
-        WebDriverWait(driver, timeout).until_not(
-            EC.presence_of_element_located((By.CSS_SELECTOR, ".dimmer-holder"))
-        )
-    except TimeoutException:
-        pass  # Continue if overlay doesn't disappear within timeout
-    
-    try:
-        WebDriverWait(driver, timeout).until_not(
-            EC.presence_of_element_located((By.CSS_SELECTOR, ".loading"))
-        )
-    except TimeoutException:
-        pass
-    
-    try:
-        WebDriverWait(driver, timeout).until_not(
-            EC.presence_of_element_located((By.CSS_SELECTOR, ".overlay"))
-        )
-    except TimeoutException:
-        pass
-
-def safe_click(driver, locator, timeout=10):
-    """Safely click an element with multiple fallback strategies"""
-    try:
-        # Wait for overlay to disappear first
-        wait_for_overlay_to_disappear(driver)
-        
-        # Wait for element to be clickable
-        element = WebDriverWait(driver, timeout).until(
-            EC.element_to_be_clickable(locator)
-        )
-        element.click()
-        return True
-        
-    except ElementClickInterceptedException:
-        logger.warning(f"Element {locator} is obscured, trying JavaScript click...")
-        try:
-            element = driver.find_element(*locator)
-            driver.execute_script("arguments[0].click();", element)
-            return True
-        except Exception as e:
-            logger.error(f"JavaScript click also failed for {locator}: {e}")
-            return False
-            
-    except TimeoutException:
-        logger.error(f"Element {locator} not clickable within {timeout} seconds")
-        return False
-        
-    except Exception as e:
-        logger.error(f"Unexpected error clicking {locator}: {e}")
-        return False
-
-def safe_fill_field(driver, field_id, value, field_name):
-    """Safely fill a form field, handling disabled/readonly states"""
-    try:
-        if not value:
-            logger.info(f"⏭️ Skipping {field_name} - no value provided")
-            return True
-            
-        element = driver.find_element(By.ID, field_id)
-        
-        # Scroll element into view
-        driver.execute_script("arguments[0].scrollIntoView(true);", element)
-        time.sleep(0.5)
-        
-        # Check current value - if already filled (auto-populated), don't override
-        current_value = element.get_attribute("value")
-        if current_value and current_value.strip():
-            logger.info(f"ℹ️ {field_name} already has value '{current_value}' - keeping existing value")
-            return True
-        
-        # Check if element is enabled and editable
-        is_enabled = element.is_enabled()
-        is_readonly = element.get_attribute("readonly")
-        is_disabled = element.get_attribute("disabled")
-        
-        if not is_enabled or is_readonly or is_disabled:
-            logger.warning(f"⚠️ {field_name} field is disabled/readonly - trying JavaScript approach")
-            try:
-                # Enable the field temporarily and fill it
-                driver.execute_script("arguments[0].removeAttribute('disabled');", element)
-                driver.execute_script("arguments[0].removeAttribute('readonly');", element)
-                driver.execute_script("arguments[0].value = arguments[1];", element, value)
-                driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
-                driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
-                driver.execute_script("arguments[0].dispatchEvent(new Event('blur', { bubbles: true }));", element)
-                logger.info(f"✓ {field_name} filled via JavaScript (was disabled)")
-                return True
-            except Exception as js_error:
-                logger.warning(f"⚠️ JavaScript fill also failed for {field_name}: {js_error}")
-                return False
-        else:
-            # Normal filling for enabled fields
-            try:
-                element.clear()
-                element.send_keys(value)
-                # Trigger events to ensure proper validation
-                driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
-                driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
-                driver.execute_script("arguments[0].dispatchEvent(new Event('blur', { bubbles: true }));", element)
-                logger.info(f"✓ {field_name} filled normally")
-                return True
-            except Exception as fill_error:
-                logger.warning(f"⚠️ Normal fill failed for {field_name}, trying JavaScript: {fill_error}")
-                try:
-                    driver.execute_script("arguments[0].value = arguments[1];", element, value)
-                    driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
-                    driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
-                    driver.execute_script("arguments[0].dispatchEvent(new Event('blur', { bubbles: true }));", element)
-                    logger.info(f"✓ {field_name} filled via JavaScript fallback")
-                    return True
-                except Exception as js_fallback_error:
-                    logger.error(f"✗ All fill methods failed for {field_name}: {js_fallback_error}")
-                    return False
-            
-    except NoSuchElementException:
-        logger.warning(f"⚠️ {field_name} field not found (ID: {field_id})")
-        return False
-    except Exception as e:
-        logger.error(f"✗ Failed to fill {field_name}: {e}")
-        return False
+# --- Helper functions are now imported from functions.py ---
 
 def fill_promoter_partner_details(driver):
     with open('config.json', 'r') as f:
@@ -394,7 +247,7 @@ def fill_promoter_partner_details(driver):
                     # Try to find any Save/Continue button and click with JavaScript
                     button = driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[3]")
                     driver.execute_script("arguments[0].scrollIntoView(true);", button)
-                    time.sleep(1)
+                    wait_for_element_stable(driver, (By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[2]/div/button[3]"))  # Replace time.sleep(1)
                     driver.execute_script("arguments[0].click();", button)
                     logger.info(f"✅ Save & Continue clicked for last promoter (Strategy 3: JavaScript)")
                     # Handle confirmation dialog if it appears
@@ -432,7 +285,7 @@ def fill_promoter_partner_details(driver):
                     logger.error(f"❌ Debug attempt failed: {debug_error}")
             
             if save_continue_clicked:
-                time.sleep(2)  # Wait for the action to complete
+                wait_for_ajax_complete(driver)  # Replace time.sleep(2)  # Wait for the action to complete
                 logger.info("✅ Successfully moved to next section after processing all promoters")
             else:
                 logger.error(f"❌ Could not click Save & Continue for last promoter - may affect next section")
@@ -561,12 +414,12 @@ def fill_single_promoter_details(driver, nigga, logger, promoter_data_item):
         try:
             address = promoter_data_item.get('pincode_map_search', '')
             if address:
-                time.sleep(2)
+                wait_for_ajax_complete(driver)  # Replace time.sleep(2)
                 nigga.send_text((By.ID, "onMapSerachId"), address)
                 logger.info("✓ Address search field filled")
                 safe_click(driver, (By.XPATH, f"//*[text()='{address}']"))
                 logger.info("✓ Address suggestion clicked")
-                time.sleep(1)
+                wait_for_element_stable(driver, (By.ID, "confirm-mapquery-btn1"))  # Replace time.sleep(1)
                 safe_click(driver, (By.ID, "confirm-mapquery-btn1"))
                 logger.info("✓ Address confirmation clicked")
         except Exception as e:
@@ -582,7 +435,7 @@ def fill_single_promoter_details(driver, nigga, logger, promoter_data_item):
                 EC.presence_of_element_located((By.ID, "pd_cntry "))
             )
             driver.execute_script("arguments[0].scrollIntoView(true);", country_dropdown)
-            time.sleep(1)
+            wait_for_element_stable(driver, (By.ID, "pd_cntry "))  # Replace time.sleep(1)
             
             # Use Select class for proper dropdown handling
             from selenium.webdriver.support.ui import Select
@@ -610,20 +463,20 @@ def fill_single_promoter_details(driver, nigga, logger, promoter_data_item):
         # Step 1: Fill PIN code first to trigger auto-population
         logger.info("Step 1: Filling PIN code to trigger auto-population...")
         pin_filled = safe_fill_field(driver, "pncd", promoter_data_item.get('pincode', ''), "PIN Code")
-        time.sleep(2)
+        wait_for_element_stable(driver, (By.ID, "pncd"))  # Replace time.sleep(2)
         safe_click(driver, (By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div[2]/fieldset/div[5]/div[1]/div/div[2]/div/ul/li"))
         
-        time.sleep(2)
+        wait_for_element_stable(driver, (By.ID, "pncd"))  # Replace time.sleep(2)
         if pin_filled:
             # Wait for auto-population to complete
             logger.info("⏳ Waiting for auto-population to complete...")
-            time.sleep(3)
+            wait_for_element_stable(driver, (By.ID, "pncd"))  # Replace time.sleep(3)
             
             # Trigger any change events that might be needed
             try:
                 pin_element = driver.find_element(By.ID, "pncd")
                 driver.execute_script("arguments[0].blur();", pin_element)
-                time.sleep(2)
+                wait_for_element_stable(driver, (By.ID, "pncd"))  # Replace time.sleep(2)
             except:
                 pass
             
@@ -668,15 +521,15 @@ def fill_single_promoter_details(driver, nigga, logger, promoter_data_item):
             
             # Step 3: Wait a bit more for fields to be enabled
             logger.info("Step 3: Waiting for fields to be enabled...")
-            time.sleep(2)
+            wait_for_element_stable(driver, (By.ID, "pncd"))  # Replace time.sleep(2)
             
             # Step 4: Fill the remaining address fields
             logger.info("Step 4: Filling remaining address fields...")
             safe_fill_field(driver, "pd_locality", promoter_data_item.get('locality', ''), "Locality")
-            time.sleep(0.7)
+            wait_for_element_stable(driver, (By.ID, "pd_locality"))  # Replace time.sleep(0.7)
             safe_fill_field(driver, "pd_road", promoter_data_item.get('street', ''), "Street/Road")
             safe_fill_field(driver, "pd_bdname", promoter_data_item.get('Building', ''), "Building Name")
-            time.sleep(0.7)
+            wait_for_element_stable(driver, (By.ID, "pd_bdname"))  # Replace time.sleep(0.7)
             safe_fill_field(driver, "pd_bdnum", promoter_data_item.get('building_flat_door_no', ''), "Building Number")
             safe_fill_field(driver, "pd_flrnum", promoter_data_item.get('floor_number', ''), "Floor Number")
             safe_fill_field(driver, "pd_landmark", promoter_data_item.get('nearby_landmark', ''), "Nearby Landmark")

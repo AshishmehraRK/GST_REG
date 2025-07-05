@@ -4,66 +4,24 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException, ElementNotInteractableException
 from selenium.webdriver.firefox.options import Options
-from functions import AutomationHelper
+from functions import (
+    AutomationHelper,
+    debug_file_upload_fields,
+    is_element_editable,
+    safe_send_text,
+    safe_click_element,
+    wait_for_page_load,
+    wait_for_form_ready,
+    wait_for_ajax_complete,
+    wait_for_element_stable,
+    wait_for_suggestions,
+    smart_wait_and_click
+)
 import time
 from logger import logger
 import json
 
-def debug_file_upload_fields(driver, logger):
-    """Debug function to identify available file upload fields on the page"""
-    try:
-        logger.info("🔍 Debugging file upload fields...")
-        file_inputs = driver.find_elements(By.XPATH, "//input[@type='file']")
-        
-        if file_inputs:
-            logger.info(f"Found {len(file_inputs)} file input field(s):")
-            for i, file_input in enumerate(file_inputs):
-                try:
-                    input_id = file_input.get_attribute("id") or "no-id"
-                    input_name = file_input.get_attribute("name") or "no-name"
-                    input_class = file_input.get_attribute("class") or "no-class"
-                    is_displayed = file_input.is_displayed()
-                    is_enabled = file_input.is_enabled()
-                    
-                    logger.info(f"  File Input {i+1}: ID='{input_id}', Name='{input_name}', Class='{input_class}', Visible={is_displayed}, Enabled={is_enabled}")
-                except Exception as e:
-                    logger.warning(f"  File Input {i+1}: Could not read attributes - {e}")
-        else:
-            logger.warning("⚠️ No file input fields found on the page")
-            
-    except Exception as e:
-        logger.error(f"✗ Error debugging file upload fields: {e}")
-
-def is_element_editable(driver, locator):
-    """Check if an element is enabled and not readonly/disabled"""
-    try:
-        element = driver.find_element(*locator)
-        is_enabled = element.is_enabled()
-        is_readonly = element.get_attribute("readonly") is not None
-        is_disabled = element.get_attribute("disabled") is not None
-        return is_enabled and not is_readonly and not is_disabled
-    except:
-        return False
-
-def safe_send_text(nigga, driver, locator, value):
-    """Safely send text to a field only if it's editable, silently skip if not"""
-    if not value or str(value).strip() == "":
-        return
-    
-    if is_element_editable(driver, locator):
-        try:
-            nigga.send_text(locator, value)
-        except:
-            pass  # Silently continue
-
-def safe_click_element(nigga, driver, locator):
-    """Safely click an element only if it's enabled, silently skip if not"""
-    try:
-        element = driver.find_element(*locator)
-        if element.is_enabled() and not element.get_attribute("disabled"):
-            nigga.click_element(locator)
-    except:
-        pass  # Silently continue
+# --- Helper functions are now imported from functions.py ---
 
 def fill_authorized_signatory_details(driver):
     """
@@ -106,7 +64,7 @@ def fill_authorized_signatory_details(driver):
                         EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Add New')]"))
                      )
                      add_new_list_button.click()
-                     time.sleep(2)  # Wait for form to load
+                     wait_for_form_ready(driver)  # Replace time.sleep(2)  # Wait for form to load
             except Exception as e:
                 logger.warning(f"Could not find or click 'Add New' from list view, assuming form is already open. Error: {e}")
 
@@ -132,7 +90,7 @@ def fill_authorized_signatory_details(driver):
                 save_and_add_new_button.click()
                 # Wait for form to be ready for next entry
                 WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "fnm")))
-                time.sleep(2)  # Additional wait for form to clear
+                wait_for_form_ready(driver)  # Replace time.sleep(2)  # Additional wait for form to clear
                 logger.info("Form cleared for next signatory.")
             except TimeoutException:
                 logger.error("Timed out waiting for 'Save & Add New' button or form to clear. Aborting.")
@@ -154,7 +112,7 @@ def fill_authorized_signatory_details(driver):
                 
                 save_and_continue_button.click()
                 logger.info("Successfully clicked final 'Save & Continue' for Authorized Signatory section.")
-                time.sleep(3)  # Wait for next page to load
+                wait_for_ajax_complete(driver)  # Replace time.sleep(3)  # Wait for next page to load
             except Exception as e:
                 logger.error(f"Could not click the final 'Save & Continue' button: {e}")
 
@@ -168,7 +126,7 @@ def fill_single_signatory_details(driver, nigga, signatory_data):
     logger.info(f"Filling details for signatory: {signatory_data.get('first_name', '')} {signatory_data.get('last_name', '')}")
     
 
-
+    
     try:
         # Primary Authorized Signatory Checkbox with robust error handling
         if signatory_data.get('is_primary_signatory') == "Yes":
@@ -200,7 +158,7 @@ def fill_single_signatory_details(driver, nigga, signatory_data):
                 try:
                     checkbox = driver.find_element(By.ID, "auth_prim")
                     driver.execute_script("arguments[0].scrollIntoView(true);", checkbox)
-                    time.sleep(0.5)
+                    wait_for_element_stable(driver, (By.ID, "auth_prim"))  # Replace time.sleep(0.5)
                     driver.execute_script("arguments[0].click();", checkbox)
                     logger.info("✅ Primary Signatory checkbox clicked (Strategy 2: JavaScript)")
                     checkbox_clicked = True
@@ -230,7 +188,7 @@ def fill_single_signatory_details(driver, nigga, signatory_data):
                         continue
             
             if checkbox_clicked:
-                time.sleep(0.5)  # Small delay after successful click
+                wait_for_element_stable(driver, (By.ID, "auth_prim"))  # Replace time.sleep(0.5)  # Small delay after successful click
                 logger.info("✅ Primary Authorized Signatory status set successfully")
             else:
                 logger.warning("⚠️ Could not click Primary Signatory checkbox - continuing anyway")
@@ -257,7 +215,7 @@ def fill_single_signatory_details(driver, nigga, signatory_data):
             safe_click_element(nigga, driver, (By.ID, "radiofemale"))
         else:
             safe_click_element(nigga, driver, (By.ID, "radiotrans"))
-        time.sleep(1)
+        wait_for_element_stable(driver, (By.ID, "radiomale"))  # Replace time.sleep(1)
 
         # Identity Information
         safe_send_text(nigga, driver, (By.ID, "dg"), signatory_data.get('designation_status', ''))
@@ -274,13 +232,13 @@ def fill_single_signatory_details(driver, nigga, signatory_data):
                 # Need to uncheck (set to No)
                 if is_checked:
                     safe_click_element(nigga, driver, (By.ID, "as_cit_ind"))
-                time.sleep(0.5)
+                wait_for_element_stable(driver, (By.ID, "as_cit_ind"))  # Replace time.sleep(0.5)
                 safe_send_text(nigga, driver, (By.ID, "ppno"), signatory_data.get('passport_number', ''))
             else:
                 # Need to check (set to Yes) - this is usually the default
                 if not is_checked:
                     safe_click_element(nigga, driver, (By.ID, "as_cit_ind"))
-                time.sleep(0.5)
+                wait_for_element_stable(driver, (By.ID, "as_cit_ind"))  # Replace time.sleep(0.5)
                 safe_send_text(nigga, driver, (By.ID, "pan"), signatory_data.get('pan_number', ''))
         except:
             pass  # Silently continue
@@ -290,7 +248,7 @@ def fill_single_signatory_details(driver, nigga, signatory_data):
         if address_pin:
             try:
                 safe_send_text(nigga, driver, (By.ID, "onMapSerachId"), address_pin)
-                time.sleep(2)  # Wait for suggestions to load
+                wait_for_suggestions(driver, (By.ID, "onMapSerachId"))  # Replace time.sleep(2)  # Wait for suggestions to load
                 
                 # Try different XPath patterns for address suggestions
                 suggestion_clicked = False
@@ -312,11 +270,11 @@ def fill_single_signatory_details(driver, nigga, signatory_data):
                         continue
                 
                 if suggestion_clicked:
-                    time.sleep(1)
+                    wait_for_ajax_complete(driver)  # Replace time.sleep(1)
                     # Try to click confirm button if it exists
                     try:
                         nigga.click_element((By.ID, "confirm-mapquery-btn2"))
-                        time.sleep(1)
+                        wait_for_element_stable(driver, (By.ID, "confirm-mapquery-btn2"))  # Replace time.sleep(1)
                     except:
                         pass  # Silently continue
                     

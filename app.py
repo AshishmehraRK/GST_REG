@@ -9,7 +9,20 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, ElementNotInteractableException, NoSuchElementException
 import time, traceback, json
 from logger import logger
-from functions import AutomationHelper
+from functions import (
+    AutomationHelper,
+    safe_checkbox_click,
+    handle_confirmation_dialog,
+    safe_click_with_dimmer_wait,
+    safe_dropdown_select,
+    wait_for_page_load,
+    wait_for_form_ready,
+    wait_for_navigation,
+    wait_for_ajax_complete,
+    smart_wait_and_click,
+    smart_wait_and_send_keys,
+    wait_for_suggestions
+)
 import promoter_partner, authorized_signatory
 import requests
 
@@ -43,107 +56,7 @@ response_model = api.model('Response', {
     'traceback': fields.String(description='The full error traceback for debugging purposes')
 })
 
-# --- Helper Function for Safe Checkbox Clicking ---
-def safe_checkbox_click(driver, checkbox_id, description="checkbox"):
-    """
-    Safely click a checkbox while handling dimmer overlay issues
-    """
-    try:
-        # Wait for any dimmer to disappear first
-        wait = WebDriverWait(driver, 15)
-        wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, "dimmer-holder")))
-        
-        # Wait for checkbox to be clickable
-        checkbox = wait.until(EC.element_to_be_clickable((By.ID, checkbox_id)))
-        checkbox.click()
-        logger.info(f"{description} ({checkbox_id}) clicked successfully")
-        return True
-        
-    except (TimeoutException, Exception) as e:
-        logger.warning(f"Normal {description} click failed, trying JavaScript click: {e}")
-        try:
-            # Fallback: JavaScript click
-            checkbox = driver.find_element(By.ID, checkbox_id)
-            driver.execute_script("arguments[0].click();", checkbox)
-            logger.info(f"{description} ({checkbox_id}) clicked with JavaScript")
-            return True
-        except Exception as js_error:
-            logger.error(f"All {description} click methods failed: {js_error}")
-            return False
-
-# --- Helper Function for Confirmation Dialog Handling ---
-def handle_confirmation_dialog(driver, logger, timeout=10):
-    """
-    Handle confirmation dialogs that appear after clicking buttons.
-    Clicks the Cancel button to dismiss the dialog.
-    Returns True if dialog was handled, False if no dialog appeared.
-    """
-    try:
-        # Wait for the confirmation dialog to appear
-        WebDriverWait(driver, timeout).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
-        )
-        
-        # Click Cancel button to dismiss the dialog
-        logger.info("🔄 Confirmation dialog detected, clicking Cancel...")
-        cancel_button = WebDriverWait(driver, timeout).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
-        )
-        cancel_button.click()
-        logger.info("✅ Confirmation dialog dismissed by clicking Cancel")
-        
-        # Wait for dialog to disappear
-        WebDriverWait(driver, timeout).until(
-            EC.invisibility_of_element_located((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
-        )
-        
-        return True
-        
-    except TimeoutException:
-        # If no dialog appears within timeout, it's not an error
-        logger.info("ℹ️ No confirmation dialog appeared")
-        return False
-    except Exception as e:
-        logger.warning(f"⚠️ Error handling confirmation dialog: {e}")
-        return False
-
-# --- Helper Function for Dimmer-Safe Clicking ---
-def safe_click_with_dimmer_wait(driver, xpath, description="button", handle_dialog=True):
-    """
-    Safely click a button while handling dimmer overlay issues and confirmation dialogs
-    """
-    try:
-        # Wait for any dimmer to disappear
-        wait = WebDriverWait(driver, 15)
-        wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, "dimmer-holder")))
-        
-        # Now try to click the button
-        button = wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
-        button.click()
-        logger.info(f"{description} clicked successfully")
-        
-        # Handle confirmation dialog if it appears
-        if handle_dialog:
-            handle_confirmation_dialog(driver, logger)
-        
-        return True
-        
-    except (TimeoutException, Exception) as e:
-        logger.warning(f"Normal click failed for {description}, trying JavaScript click: {e}")
-        # Fallback: Use JavaScript click to bypass the overlay
-        try:
-            button = driver.find_element(By.XPATH, xpath)
-            driver.execute_script("arguments[0].click();", button)
-            logger.info(f"{description} clicked with JavaScript")
-            
-            # Handle confirmation dialog if it appears
-            if handle_dialog:
-                handle_confirmation_dialog(driver, logger)
-            
-            return True
-        except Exception as js_error:
-            logger.error(f"All click methods failed for {description}: {js_error}")
-            return False
+# --- Helper functions are now imported from functions.py ---
 
 # --- Main Automation Logic ---
 def run_full_automation(config):
@@ -169,24 +82,48 @@ def run_full_automation(config):
         # --- Start of Corrected Flow ---
         driver.get("https://reg.gst.gov.in/registration/")
         helper = AutomationHelper(driver, logger) # Renamed variable for professionalism
-        time.sleep(5)
+        wait_for_page_load(driver)  # Replace time.sleep(5)
 
         # 1. Initial Registration (Part A)
-        time.sleep(2)
+        wait_for_form_ready(driver)  # Replace time.sleep(2)
         logger.info("Filling Part A: Initial Registration Details...")
         registration = config['initial_registration_details']
-        values_to_click = [registration['selected_taxpayer_type'], registration['selected_state']]
-        for val in values_to_click:
-            helper.click_element((By.XPATH, f"//*[text()='{val}']"))
-        time.sleep(2)
-        helper.click_element((By.XPATH, f"//*[text()='{registration['selected_district']}']"))
+        
+        # Handle taxpayer type dropdown
+        safe_dropdown_select(
+            driver, 
+            (By.ID, "applnType"), 
+            registration['selected_taxpayer_type'], 
+            "Taxpayer Type dropdown"
+        )
+        
+        # Handle state dropdown  
+        safe_dropdown_select(
+            driver,
+            (By.ID, "applnState"),
+            registration['selected_state'],
+            "State dropdown"
+        )
+        
+        wait_for_ajax_complete(driver)  # Wait for state selection to load districts
+        
+        # Handle district dropdown
+        safe_dropdown_select(
+            driver,
+            (By.ID, "applnDistr"), 
+            registration['selected_district'],
+            "District dropdown"
+        )
+        
         helper.send_text((By.ID, "bnm"), registration['business_name'])
         helper.send_text((By.ID, "pan_card"), registration['pan_card'])
         helper.send_text((By.ID, "email"), registration['email'])
         helper.send_text((By.ID, "mobile"), registration['mobile_number'])
         helper.solve_and_enter_captcha()
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div[2]/div/div[2]/div/form/div[2]/div/div[2]/div/button", "Submit button")
-        time.sleep(0.7)
+        
+        # Wait for page transition instead of arbitrary sleep
+        wait_for_navigation(driver, timeout=5)  # Replace time.sleep(0.7)
         safe_click_with_dimmer_wait(driver, "/html/body/table-view/div/div/div/div/div[2]/a[2]", "Continue link")
 
         # 2. Handle Mobile and Email OTP
@@ -197,12 +134,12 @@ def run_full_automation(config):
         email_otp = helper.poll_for_otp("email_otp")
         helper.send_text((By.ID, "email-otp"), email_otp)
 
-        time.sleep(2)
+        wait_for_ajax_complete(driver)  # Replace time.sleep(2)
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/form/div/div/button", "Proceed after OTPs button") # Proceed after OTPs
 
         # 3. Handle TRN (Temporary Reference Number)
         logger.info("Waiting for TRN submission to log in...")
-        time.sleep(5) # Wait for TRN success page to load
+        wait_for_page_load(driver)  # Replace time.sleep(5) # Wait for TRN success page to load
         
         # Proceed to login page
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div[2]/div/div[2]/div/div[2]/div/div[2]/div/a", "Login page link") 
@@ -220,30 +157,34 @@ def run_full_automation(config):
 
         # 5. Continue with Part B of the application
         logger.info("Successfully logged in. Starting Part B...")
-        time.sleep(5)
+        wait_for_page_load(driver)  # Replace time.sleep(5)
         # Click the "Action" button on the dashboard with dimmer safety
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div[1]/div/div[3]/div[2]/div/div/table/tbody/tr/td[6]/button", "Action button")
 
         # Business Details
         logger.info("Filling Part B: Business Details...")
         business_details = config['business_details']
-        time.sleep(5)
+        wait_for_form_ready(driver)  # Replace time.sleep(5)
         helper.send_text((By.ID, "tnm"), business_details['trade_name'])
-        helper.click_element((By.XPATH, f"//*[text()='{business_details['constitution_of_business']}']"))
+        safe_click_with_dimmer_wait(driver, f"//*[text()='{business_details['constitution_of_business']}']", f"Constitution of business: {business_details['constitution_of_business']}")
         if business_details.get('specific_other_constitution'):
             helper.send_text((By.ID, "bd_ConstBuss_oth"), business_details['specific_other_constitution'])
-        helper.click_element((By.XPATH, f"//*[text()='{business_details['reason_to_obtain_registration']}']"))
+        safe_click_with_dimmer_wait(driver, f"//*[text()='{business_details['reason_to_obtain_registration']}']", f"Reason for registration: {business_details['reason_to_obtain_registration']}")
         helper.send_text((By.ID, "bd_cmbz"), business_details['date_of_commencement_of_business'])
         
         # Handle optional registration type fields
         if business_details.get('type_of_registration'):
             type_of_registration = business_details['type_of_registration']
             if type_of_registration != "Others (Please Specify)":
-                helper.click_element((By.ID, "exty"))
-                helper.click_element((By.XPATH, f"//option[text()='{type_of_registration}']"))   
+                safe_dropdown_select(
+                    driver,
+                    (By.ID, "exty"),
+                    type_of_registration,
+                    "Registration Type dropdown"
+                )
             else:
-                helper.click_element((By.XPATH, "/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[1]/select/option[16]"))
-                time.sleep(2)
+                safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[1]/select/option[16]", "Other registration type option")
+                wait_for_ajax_complete(driver)  # Replace time.sleep(2)
                 helper.send_text((By.ID, "bd_othrReg"), business_details['other_registration_type'])
             
         if business_details.get('other_registration_number'):
@@ -255,8 +196,8 @@ def run_full_automation(config):
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/fieldset/div[1]/div[8]/div/div[4]/button[1]", "Business details Save & Continue button") # Save & Continue
 
         # Handle Registration Certificate Upload with validation and error handling
-        helper.click_element((By.XPATH, f"//*[text()='{business_details['Proof_of_Constitution_of_Business']}']"))
-        time.sleep(2)
+        safe_click_with_dimmer_wait(driver, f"//*[text()='{business_details['Proof_of_Constitution_of_Business']}']", f"Proof of constitution: {business_details['Proof_of_Constitution_of_Business']}")
+        wait_for_ajax_complete(driver)  # Replace time.sleep(2)
         
         # Business Constitution Proof Upload
         if business_details.get('proof_of_consititution'):
@@ -293,7 +234,7 @@ def run_full_automation(config):
         else:
             logger.info("ℹ️ No business proof document specified in config - skipping upload")
         
-        time.sleep(2)
+        wait_for_ajax_complete(driver)
         driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div[3]/form/div/div/button[2]").click()
 
         # Promoter/Partner Details with enhanced error handling
@@ -343,24 +284,24 @@ def run_full_automation(config):
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div[2]/div[3]/div/button[3]", "Authorized Signatory Save & Continue button") # Save & Continue
 
 
-        time.sleep(3)
+        wait_for_ajax_complete(driver)
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div/div/button[2]", "Principal Place Save & Continue button") # Save & Continue
 
         # Principal Place of Business
         logger.info("Filling Principal Place of Business Details...")
         principal_details = config['principal_place_of_business_details']
-        time.sleep(5)
+        wait_for_form_ready(driver)  # Replace time.sleep(5)
         
         # Handle map search with better error handling
         try:
             # Search for address
-            time.sleep(3) 
+            wait_for_ajax_complete(driver) 
             helper.send_text((By.ID, "onMapSerachId"), principal_details['address_map_search'])
              # Give more time for search results to load
             
             # Click on search result
-            time.sleep(3) 
-            helper.click_element((By.XPATH, f"//*[text()='{principal_details['address_map_search']}']"))
+            wait_for_ajax_complete(driver) 
+            safe_click_with_dimmer_wait(driver, f"//*[text()='{principal_details['address_map_search']}']", f"Address search result: {principal_details['address_map_search']}")
              # Wait for map to update
             
             # Try to confirm map query with multiple approaches
@@ -404,12 +345,12 @@ def run_full_automation(config):
             pin = principal_details['pincode']
             helper.send_text((By.ID, "pncd"), pin)
 
-        time.sleep(2)
+        wait_for_ajax_complete(driver)
         if principal_details.get('district'):
             District = principal_details['district']
             helper.send_text((By.ID, "dst"), District)
 
-        time.sleep(2)
+        wait_for_ajax_complete(driver)
         if principal_details.get('city_town_village'):
             City = principal_details['city_town_village']
             try:
@@ -429,54 +370,114 @@ def run_full_automation(config):
                     logger.error(f"JavaScript approach also failed for 'loc' field: {js_error}")
                     logger.info("Continuing automation despite 'loc' field failure...")
 
-        time.sleep(2)
+        wait_for_ajax_complete(driver)
         if principal_details.get('street'):
             Street = principal_details['street']
             helper.send_text((By.ID, "st"), Street)
 
-        time.sleep(2)
+        wait_for_ajax_complete(driver)
         if principal_details.get('building_no'):
             Building_no = principal_details['building_no']
             helper.send_text((By.ID, "bno"), Building_no)
 
-        time.sleep(5)
+        wait_for_ajax_complete(driver)
         helper.click_element((By.ID, "bp_flrnum"))
 
         # Handle jurisdiction details
         if principal_details.get('jurisdiction'):
             jurisdiction = principal_details['jurisdiction']
             
-            time.sleep(2)
+            wait_for_ajax_complete(driver)
             if jurisdiction.get('ward'):
                 start_jurisdiction = jurisdiction['ward']
-                helper.click_element((By.XPATH, f"//*[text()='{start_jurisdiction}']"))
+                logger.info(f"📍 Selecting Ward: {start_jurisdiction}")
+                # Try multiple possible IDs for ward dropdown
+                ward_selected = safe_dropdown_select(
+                    driver, 
+                    ["wdcd", "wardcd", "ward", "jurisdiction_ward"], 
+                    start_jurisdiction, 
+                    "Ward"
+                )
+                if not ward_selected:
+                    logger.warning(f"⚠️ Ward dropdown not found, trying text-based selection")
+                    helper.click_element((By.XPATH, f"//*[text()='{start_jurisdiction}']"))
 
-            time.sleep(1)
+            wait_for_ajax_complete(driver)
             if jurisdiction.get('commissionerate'):
                 Commissionerate = jurisdiction['commissionerate']
-                helper.click_element((By.XPATH, f"//*[text()='{Commissionerate}']"))
+                logger.info(f"📍 Selecting Commissionerate: {Commissionerate}")
+                # Try multiple possible IDs for commissionerate dropdown
+                comm_selected = safe_dropdown_select(
+                    driver, 
+                    ["cmcd", "commcd", "commissionerate", "jurisdiction_comm"], 
+                    Commissionerate, 
+                    "Commissionerate"
+                )
+                if not comm_selected:
+                    logger.warning(f"⚠️ Commissionerate dropdown not found, trying text-based selection")
+                    helper.click_element((By.XPATH, f"//*[text()='{Commissionerate}']"))
 
-            time.sleep(2)
+            wait_for_ajax_complete(driver)
             if jurisdiction.get('division'):
                 Division = jurisdiction['division']
-                helper.click_element((By.XPATH, f"//*[text()='{Division}']"))
+                logger.info(f"📍 Selecting Division: {Division}")
+                # Try multiple possible IDs for division dropdown
+                div_selected = safe_dropdown_select(
+                    driver, 
+                    ["dvcd", "divcd", "division", "jurisdiction_div"], 
+                    Division, 
+                    "Division"
+                )
+                if not div_selected:
+                    logger.warning(f"⚠️ Division dropdown not found, trying text-based selection")
+                    helper.click_element((By.XPATH, f"//*[text()='{Division}']"))
 
-            time.sleep(2)
+            wait_for_ajax_complete(driver)
             if jurisdiction.get('range'):
                 Range = jurisdiction['range']
-                helper.click_element((By.XPATH, f"//*[text()='{Range}']"))
+                logger.info(f"📍 Selecting Range: {Range}")
+                # We know range dropdown ID is "rgcd"
+                range_selected = safe_dropdown_select(
+                    driver, 
+                    ["rgcd", "rangecd", "range", "jurisdiction_range"], 
+                    Range, 
+                    "Range"
+                )
+                if not range_selected:
+                    logger.warning(f"⚠️ Range dropdown not found, trying text-based selection")
+                    helper.click_element((By.XPATH, f"//*[text()='{Range}']"))
 
         # Handle nature of possession
-        time.sleep(2)
+        wait_for_ajax_complete(driver)
         if principal_details.get('nature_of_possession_of_premises'):
             select = principal_details['nature_of_possession_of_premises']
-            helper.click_element((By.XPATH, f"//*[text()='{select}']"))
+            logger.info(f"📍 Selecting Nature of Possession: {select}")
+            # Try multiple possible IDs for nature of possession dropdown
+            possession_selected = safe_dropdown_select(
+                driver, 
+                ["natposs", "nature_possession", "possession", "bp_natposs"], 
+                select, 
+                "Nature of Possession"
+            )
+            if not possession_selected:
+                logger.warning(f"⚠️ Nature of possession dropdown not found, trying text-based selection")
+                helper.click_element((By.XPATH, f"//*[text()='{select}']"))
 
         # Handle document proof
-        time.sleep(2)
+        wait_for_ajax_complete(driver)
         if principal_details.get('document_proof'):
             principal_place = principal_details['document_proof']
-            helper.click_element((By.XPATH, f"//*[text()='{principal_place}']"))
+            logger.info(f"📍 Selecting Document Proof: {principal_place}")
+            # Try multiple possible IDs for document proof dropdown
+            proof_selected = safe_dropdown_select(
+                driver, 
+                ["docproof", "document_proof", "bp_docproof", "proof_type"], 
+                principal_place, 
+                "Document Proof"
+            )
+            if not proof_selected:
+                logger.warning(f"⚠️ Document proof dropdown not found, trying text-based selection")
+                helper.click_element((By.XPATH, f"//*[text()='{principal_place}']"))
 
         # Principal Place Document Uploads with validation and error handling
         logger.info("📁 Starting principal place document upload process...")
@@ -516,7 +517,7 @@ def run_full_automation(config):
         else:
             logger.info("ℹ️ No principal place document 1 specified in config - skipping upload")
 
-        time.sleep(2)
+        wait_for_ajax_complete(driver)
         
         # Second document upload
         if principal_details.get('document_upload_2'):
@@ -554,7 +555,7 @@ def run_full_automation(config):
             logger.info("ℹ️ No principal place document 2 specified in config - skipping upload")
             
         logger.info("📁 Principal place document upload process completed")
-
+        
         # Nature of Business with robust error handling
         nature_list = principal_details.get("nature_of_business", [])
         logger.info(f"Processing {len(nature_list)} nature of business items: {nature_list}")
@@ -573,7 +574,7 @@ def run_full_automation(config):
                     try:
                         checkbox_element = driver.find_element(By.ID, checkbox_id)
                         driver.execute_script("arguments[0].scrollIntoView(true);", checkbox_element)
-                        time.sleep(1)  # Wait for scroll to complete
+                        wait_for_ajax_complete(driver)  # Replace time.sleep(1)
                         
                         # Method 2: Wait for element to be clickable
                         wait = WebDriverWait(driver, 10)
@@ -605,23 +606,23 @@ def run_full_automation(config):
                     # No checkbox ID found, click the label directly
                     try:
                         driver.execute_script("arguments[0].scrollIntoView(true);", label_element)
-                        time.sleep(1)
                         label_element.click()
                         logger.info(f"Clicked label directly for {item}")
                     except Exception as label_error:
                         logger.error(f"Failed to click label for {item}: {label_error}")
                         continue
                         
-                time.sleep(0.5)  # Small delay between selections
+                wait_for_ajax_complete(driver)  # Replace time.sleep(0.5)
                 
             except Exception as item_error:
                 logger.error(f"Failed to process nature of business item '{item}': {item_error}")
                 continue  # Skip this item and continue with the next one
 
+        wait_for_ajax_complete(driver)
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div/div/button[2]", "Nature of Business Save & Continue button") # Save & Continue
 
         # Additional Place of Business (Continue if none)
-        time.sleep(1)
+        wait_for_ajax_complete(driver)
         
         # Handle dimmer overlay for Additional Place of Business button
         try:
@@ -644,18 +645,30 @@ def run_full_automation(config):
         # Goods & Services Details
         logger.info("Filling Goods and Services Details...")
         gst_details = config['goods_services_details']
-        driver.find_element(By.ID, "gs_hsn_value").send_keys(gst_details['hsn_value'])
-        time.sleep(2)
-        driver.find_element(By.XPATH, f"//*[text()='{gst_details['hsn_value']}']").click()
-        time.sleep(2)
+        try:
+            driver.find_element(By.ID, "gs_hsn_value").send_keys(gst_details['hsn_value'])
+            wait_for_ajax_complete(driver) 
+            try:
+                safe_click_with_dimmer_wait(driver, f"//*[text()='{gst_details['hsn_value']}']", "HSN exact match")
+            except Exception as e:
+                logger.error(f"Failed to click HSN exact match: {e}")
+                driver.find_element(By.ID, "gs_hsn_value").send_keys(gst_details['hsn_value'])
+                wait_for_ajax_complete(driver) 
+                safe_click_with_dimmer_wait(driver, f"//*[text()='{gst_details['hsn_value']}']", "HSN exact match")
+        except Exception as e:
+            logger.error(f"Failed to click HSN exact match: {e}")
+
+        wait_for_ajax_complete(driver) 
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div[2]/div/button", "Goods Services Save & Continue button") # Save & Continue
         
 
+        # wait_for_ajax_complete(driver)  # Replace time.sleep(1)
+        # safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div/div[2]/div/button[2]", "Additional form continue button")
 
         safe_click_with_dimmer_wait(driver, "//*[@type='submit']", "Submit button")
 
         # Checkbox click with dimmer protection
-        safe_checkbox_click(driver, "chkboxop0", "Agreement checkbox")
+        # safe_checkbox_click(driver, "chkboxop0", "Agreement checkbox")
 
         ## GOOD AND SERVICE SAVE AND CONTINUE
         safe_click_with_dimmer_wait(driver, "/html/body/div[2]/div/div/div[3]/form/div/div/button", "Final submission button") # Save & Continue
@@ -754,4 +767,4 @@ if __name__ == '__main__':
         print("Starting GST Automation API on http://localhost:8001")
         print("Swagger UI is available at http://localhost:8001/docs/")
         print("To run automation directly, use: python3 app.py --direct")
-        app.run(host='0.0.0.0', port=8001, debug=True)
+        app.run(host='0.0.0.0', port=8001, debug=True) 
