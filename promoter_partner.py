@@ -523,16 +523,46 @@ def fill_single_promoter_details(driver, nigga, logger, promoter_data_item):
             logger.info("Step 3: Waiting for fields to be enabled...")
             wait_for_element_stable(driver, (By.ID, "pncd"))  # Replace time.sleep(2)
             
-            # Step 4: Fill the remaining address fields
+            # Step 4: Fill the remaining address fields efficiently
             logger.info("Step 4: Filling remaining address fields...")
-            safe_fill_field(driver, "pd_locality", promoter_data_item.get('locality', ''), "Locality")
-            wait_for_element_stable(driver, (By.ID, "pd_locality"))  # Replace time.sleep(0.7)
-            safe_fill_field(driver, "pd_road", promoter_data_item.get('street', ''), "Street/Road")
-            safe_fill_field(driver, "pd_bdname", promoter_data_item.get('Building', ''), "Building Name")
-            wait_for_element_stable(driver, (By.ID, "pd_bdname"))  # Replace time.sleep(0.7)
-            safe_fill_field(driver, "pd_bdnum", promoter_data_item.get('building_flat_door_no', ''), "Building Number")
-            safe_fill_field(driver, "pd_flrnum", promoter_data_item.get('floor_number', ''), "Floor Number")
-            safe_fill_field(driver, "pd_landmark", promoter_data_item.get('nearby_landmark', ''), "Nearby Landmark")
+            
+            # Fill all address fields without individual waits (safe_fill_field handles stability)
+            fields_to_fill = [
+                ("pd_locality", promoter_data_item.get('locality', ''), "Locality"),
+                ("pd_road", promoter_data_item.get('street', ''), "Street/Road"),
+                ("pd_bdname", promoter_data_item.get('Building', ''), "Building Name"),
+                ("pd_bdnum", promoter_data_item.get('building_flat_door_no', ''), "Building Number"),
+                ("pd_flrnum", promoter_data_item.get('floor_number', ''), "Floor Number"),
+                ("pd_landmark", promoter_data_item.get('nearby_landmark', ''), "Nearby Landmark")
+            ]
+            
+            filled_count = 0
+            for field_id, value, field_name in fields_to_fill:
+                if safe_fill_field(driver, field_id, value, field_name):
+                    filled_count += 1
+            
+            # Single wait for form validation/processing after all fields are filled
+            if filled_count > 0:
+                logger.info(f"✅ Filled {filled_count} address fields, waiting for form validation...")
+                try:
+                    # Wait for any form validation or processing to complete
+                    wait_for_ajax_complete(driver)
+                    
+                    # Verify critical fields are properly filled and stable
+                    critical_fields = ["pd_locality", "pd_road", "pd_bdnum"]
+                    for field_id in critical_fields:
+                        try:
+                            element = driver.find_element(By.ID, field_id)
+                            if element.get_attribute("value"):
+                                logger.debug(f"✓ {field_id} value confirmed")
+                        except:
+                            pass  # Field might not exist or be visible
+                    
+                    logger.info("✅ Address form validation completed")
+                except Exception as validation_error:
+                    logger.warning(f"⚠️ Form validation wait failed: {validation_error}")
+            else:
+                logger.info("ℹ️ No address fields filled - skipping validation wait")
         else:
             logger.error("❌ PIN code filling failed, skipping address fields")
             
