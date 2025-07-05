@@ -11,7 +11,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import (
     TimeoutException,
     StaleElementReferenceException,
-    ElementNotInteractableException
+    ElementNotInteractableException,
+    ElementClickInterceptedException,
+    NoSuchElementException
 )
 import platform
 import subprocess
@@ -33,6 +35,663 @@ class AutomationError(Exception):
 
 class VerificationStepFailed(AutomationError):
     pass
+
+# --- Helper Functions for Safe UI Interactions ---
+
+def safe_checkbox_click(driver, checkbox_id, description="checkbox"):
+    """
+    Safely click a checkbox while handling dimmer overlay issues
+    """
+    try:
+        # Wait for any dimmer to disappear first
+        wait = WebDriverWait(driver, 15)
+        wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, "dimmer-holder")))
+        
+        # Wait for checkbox to be clickable
+        checkbox = wait.until(EC.element_to_be_clickable((By.ID, checkbox_id)))
+        checkbox.click()
+        logger.info(f"{description} ({checkbox_id}) clicked successfully")
+        return True
+        
+    except (TimeoutException, Exception) as e:
+        logger.warning(f"Normal {description} click failed, trying JavaScript click: {e}")
+        try:
+            # Fallback: JavaScript click
+            checkbox = driver.find_element(By.ID, checkbox_id)
+            driver.execute_script("arguments[0].click();", checkbox)
+            logger.info(f"{description} ({checkbox_id}) clicked with JavaScript")
+            return True
+        except Exception as js_error:
+            logger.error(f"All {description} click methods failed: {js_error}")
+            return False
+
+def handle_confirmation_dialog(driver, logger, timeout=10):
+    """
+    Handle confirmation dialogs that appear after clicking buttons.
+    Clicks the Cancel button to dismiss the dialog.
+    Returns True if dialog was handled, False if no dialog appeared.
+    """
+    try:
+        # Wait for the confirmation dialog to appear
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
+        )
+        
+        # Click Cancel button to dismiss the dialog
+        logger.info("🔄 Confirmation dialog detected, clicking Cancel...")
+        cancel_button = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
+        )
+        cancel_button.click()
+        logger.info("✅ Confirmation dialog dismissed by clicking Cancel")
+        
+        # Wait for dialog to disappear
+        WebDriverWait(driver, timeout).until(
+            EC.invisibility_of_element_located((By.XPATH, '//*[@id="confirmDialogue_cancel_btn"]'))
+        )
+        
+        return True
+        
+    except TimeoutException:
+        # If no dialog appears within timeout, it's not an error
+        logger.info("ℹ️ No confirmation dialog appeared")
+        return False
+    except Exception as e:
+        logger.warning(f"⚠️ Error handling confirmation dialog: {e}")
+        return False
+
+def safe_click_with_dimmer_wait(driver, xpath, description="button", handle_dialog=True):
+    """
+    Safely click a button while handling dimmer overlay issues and confirmation dialogs
+    """
+    try:
+        # Wait for any dimmer to disappear
+        wait = WebDriverWait(driver, 15)
+        wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, "dimmer-holder")))
+        
+        # Now try to click the button
+        button = wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
+        button.click()
+        logger.info(f"{description} clicked successfully")
+        
+        # Handle confirmation dialog if it appears
+        if handle_dialog:
+            handle_confirmation_dialog(driver, logger)
+        
+        return True
+        
+    except (TimeoutException, Exception) as e:
+        logger.warning(f"Normal click failed for {description}, trying JavaScript click: {e}")
+        # Fallback: Use JavaScript click to bypass the overlay
+        try:
+            button = driver.find_element(By.XPATH, xpath)
+            driver.execute_script("arguments[0].click();", button)
+            logger.info(f"{description} clicked with JavaScript")
+            
+            # Handle confirmation dialog if it appears
+            if handle_dialog:
+                handle_confirmation_dialog(driver, logger)
+            
+            return True
+        except Exception as js_error:
+            logger.error(f"All click methods failed for {description}: {js_error}")
+            return False
+
+def wait_for_overlay_to_disappear(driver, timeout=10):
+    """Wait for loading overlays or dimmer elements to disappear"""
+    try:
+        # Wait for common overlay/dimmer elements to disappear
+        WebDriverWait(driver, timeout).until_not(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".dimmer-holder"))
+        )
+    except TimeoutException:
+        pass  # Continue if overlay doesn't disappear within timeout
+    
+    try:
+        WebDriverWait(driver, timeout).until_not(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".loading"))
+        )
+    except TimeoutException:
+        pass
+    
+    try:
+        WebDriverWait(driver, timeout).until_not(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".overlay"))
+        )
+    except TimeoutException:
+        pass
+
+def safe_click(driver, locator, timeout=10):
+    """Safely click an element with multiple fallback strategies"""
+    try:
+        # Wait for overlay to disappear first
+        wait_for_overlay_to_disappear(driver)
+        
+        # Wait for element to be clickable
+        element = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable(locator)
+        )
+        element.click()
+        return True
+        
+    except ElementClickInterceptedException:
+        logger.warning(f"Element {locator} is obscured, trying JavaScript click...")
+        try:
+            element = driver.find_element(*locator)
+            driver.execute_script("arguments[0].click();", element)
+            return True
+        except Exception as e:
+            logger.error(f"JavaScript click also failed for {locator}: {e}")
+            return False
+            
+    except TimeoutException:
+        logger.error(f"Element {locator} not clickable within {timeout} seconds")
+        return False
+        
+    except Exception as e:
+        logger.error(f"Unexpected error clicking {locator}: {e}")
+        return False
+
+def safe_fill_field(driver, field_id, value, field_name):
+    """Safely fill a form field, handling disabled/readonly states"""
+    try:
+        if not value:
+            logger.info(f"⏭️ Skipping {field_name} - no value provided")
+            return True
+            
+        element = driver.find_element(By.ID, field_id)
+        
+        # Scroll element into view
+        driver.execute_script("arguments[0].scrollIntoView(true);", element)
+        time.sleep(0.5)
+        
+        # Check current value - if already filled (auto-populated), don't override
+        current_value = element.get_attribute("value")
+        if current_value and current_value.strip():
+            logger.info(f"ℹ️ {field_name} already has value '{current_value}' - keeping existing value")
+            return True
+        
+        # Check if element is enabled and editable
+        is_enabled = element.is_enabled()
+        is_readonly = element.get_attribute("readonly")
+        is_disabled = element.get_attribute("disabled")
+        
+        if not is_enabled or is_readonly or is_disabled:
+            logger.warning(f"⚠️ {field_name} field is disabled/readonly - trying JavaScript approach")
+            try:
+                # Enable the field temporarily and fill it
+                driver.execute_script("arguments[0].removeAttribute('disabled');", element)
+                driver.execute_script("arguments[0].removeAttribute('readonly');", element)
+                driver.execute_script("arguments[0].value = arguments[1];", element, value)
+                driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
+                driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
+                driver.execute_script("arguments[0].dispatchEvent(new Event('blur', { bubbles: true }));", element)
+                logger.info(f"✓ {field_name} filled via JavaScript (was disabled)")
+                return True
+            except Exception as js_error:
+                logger.warning(f"⚠️ JavaScript fill also failed for {field_name}: {js_error}")
+                return False
+        else:
+            # Normal filling for enabled fields
+            try:
+                element.clear()
+                element.send_keys(value)
+                # Trigger events to ensure proper validation
+                driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
+                driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
+                driver.execute_script("arguments[0].dispatchEvent(new Event('blur', { bubbles: true }));", element)
+                logger.info(f"✓ {field_name} filled normally")
+                return True
+            except Exception as fill_error:
+                logger.warning(f"⚠️ Normal fill failed for {field_name}, trying JavaScript: {fill_error}")
+                try:
+                    driver.execute_script("arguments[0].value = arguments[1];", element, value)
+                    driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
+                    driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
+                    driver.execute_script("arguments[0].dispatchEvent(new Event('blur', { bubbles: true }));", element)
+                    logger.info(f"✓ {field_name} filled via JavaScript fallback")
+                    return True
+                except Exception as js_fallback_error:
+                    logger.error(f"✗ All fill methods failed for {field_name}: {js_fallback_error}")
+                    return False
+            
+    except NoSuchElementException:
+        logger.warning(f"⚠️ {field_name} field not found (ID: {field_id})")
+        return False
+    except Exception as e:
+        logger.error(f"✗ Failed to fill {field_name}: {e}")
+        return False
+
+def debug_file_upload_fields(driver, logger):
+    """Debug function to identify available file upload fields on the page"""
+    try:
+        logger.info("🔍 Debugging file upload fields...")
+        file_inputs = driver.find_elements(By.XPATH, "//input[@type='file']")
+        
+        if file_inputs:
+            logger.info(f"Found {len(file_inputs)} file input field(s):")
+            for i, file_input in enumerate(file_inputs):
+                try:
+                    input_id = file_input.get_attribute("id") or "no-id"
+                    input_name = file_input.get_attribute("name") or "no-name"
+                    input_class = file_input.get_attribute("class") or "no-class"
+                    is_displayed = file_input.is_displayed()
+                    is_enabled = file_input.is_enabled()
+                    
+                    logger.info(f"  File Input {i+1}: ID='{input_id}', Name='{input_name}', Class='{input_class}', Visible={is_displayed}, Enabled={is_enabled}")
+                except Exception as e:
+                    logger.warning(f"  File Input {i+1}: Could not read attributes - {e}")
+        else:
+            logger.warning("⚠️ No file input fields found on the page")
+            
+    except Exception as e:
+        logger.error(f"✗ Error debugging file upload fields: {e}")
+
+def is_element_editable(driver, locator):
+    """Check if an element is enabled and not readonly/disabled"""
+    try:
+        element = driver.find_element(*locator)
+        is_enabled = element.is_enabled()
+        is_readonly = element.get_attribute("readonly") is not None
+        is_disabled = element.get_attribute("disabled") is not None
+        return is_enabled and not is_readonly and not is_disabled
+    except:
+        return False
+
+def safe_send_text(nigga, driver, locator, value):
+    """Safely send text to a field only if it's editable, silently skip if not"""
+    if not value or str(value).strip() == "":
+        return
+    
+    if is_element_editable(driver, locator):
+        try:
+            nigga.send_text(locator, value)
+        except:
+            pass  # Silently continue
+
+def safe_click_element(nigga, driver, locator):
+    """Safely click an element only if it's enabled, silently skip if not"""
+    try:
+        element = driver.find_element(*locator)
+        if element.is_enabled() and not element.get_attribute("disabled"):
+            nigga.click_element(locator)
+    except:
+        pass  # Silently continue
+
+# --- End of Helper Functions ---
+
+# --- Advanced WebDriverWait Helper Functions to Replace time.sleep() ---
+
+def wait_for_page_load(driver, timeout=30):
+    """Wait for page to fully load using document.readyState and absence of loading indicators"""
+    try:
+        # Wait for document to be ready
+        WebDriverWait(driver, timeout).until(
+            lambda d: d.execute_script("return document.readyState") == "complete"
+        )
+        
+        # Wait for any loading overlays to disappear
+        WebDriverWait(driver, 5).until(
+            EC.invisibility_of_element_located((By.CLASS_NAME, "dimmer-holder"))
+        )
+        
+        # Wait for common loading indicators to disappear
+        WebDriverWait(driver, 5).until(
+            EC.invisibility_of_element_located((By.CSS_SELECTOR, ".loading, .spinner, .loader"))
+        )
+        
+        logger.info("✅ Page fully loaded")
+        return True
+        
+    except TimeoutException:
+        logger.warning("⚠️ Page load timeout - continuing anyway")
+        return False
+
+def wait_for_element_stable(driver, locator, timeout=10):
+    """Wait for element to be present, visible, and stable (not moving/changing)"""
+    try:
+        # Wait for element to be present
+        element = WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located(locator)
+        )
+        
+        # Wait for element to be visible
+        WebDriverWait(driver, timeout).until(
+            EC.visibility_of_element_located(locator)
+        )
+        
+        # Check element stability by comparing position twice
+        initial_location = element.location
+        time.sleep(0.1)  # Small check interval
+        final_location = element.location
+        
+        if initial_location == final_location:
+            logger.debug(f"✅ Element {locator} is stable and ready")
+            return element
+        else:
+            logger.debug(f"⚠️ Element {locator} still moving, waiting...")
+            time.sleep(0.5)
+            return wait_for_element_stable(driver, locator, timeout-1)
+            
+    except TimeoutException:
+        logger.warning(f"⚠️ Element {locator} not stable within {timeout}s")
+        return None
+
+def wait_for_form_ready(driver, form_identifier=None, timeout=15):
+    """Wait for form to be ready for input (no disabled state, overlays gone)"""
+    try:
+        # Wait for page to be ready
+        wait_for_page_load(driver, timeout//3)
+        
+        # If specific form identifier provided, wait for it
+        if form_identifier:
+            WebDriverWait(driver, timeout).until(
+                EC.presence_of_element_located(form_identifier)
+            )
+        
+        # Wait for common form loading states to complete
+        WebDriverWait(driver, timeout).until_not(
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".form-loading, .form-disabled"))
+        )
+        
+        # Wait for Angular/React forms to initialize (if applicable)
+        try:
+            WebDriverWait(driver, 5).until(
+                lambda d: d.execute_script("return (typeof angular !== 'undefined' ? angular.element(document).injector().get('$http').pendingRequests.length === 0 : true)")
+            )
+        except:
+            pass  # Not an Angular app or different setup
+        
+        logger.info("✅ Form ready for input")
+        return True
+        
+    except TimeoutException:
+        logger.warning(f"⚠️ Form not ready within {timeout}s - continuing anyway")
+        return False
+
+def wait_for_dropdown_options(driver, dropdown_locator, timeout=10):
+    """Wait for dropdown options to populate"""
+    try:
+        # Wait for dropdown to be present
+        dropdown = WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located(dropdown_locator)
+        )
+        
+        # Wait for options to be populated (more than just empty/default option)
+        WebDriverWait(driver, timeout).until(
+            lambda d: len(d.find_elements(By.CSS_SELECTOR, f"{dropdown_locator[1]} option")) > 1
+        )
+        
+        logger.info(f"✅ Dropdown {dropdown_locator} options loaded")
+        return True
+        
+    except TimeoutException:
+        logger.warning(f"⚠️ Dropdown {dropdown_locator} options not loaded within {timeout}s")
+        return False
+
+def wait_for_suggestions(driver, input_locator, timeout=10):
+    """Wait for autocomplete/suggestion dropdown to appear"""
+    try:
+        # First trigger the input to ensure suggestions appear
+        input_element = driver.find_element(*input_locator)
+        input_element.click()
+        
+        # Wait for suggestion container to appear
+        suggestion_selectors = [
+            ".suggestions", ".autocomplete", ".dropdown-menu", 
+            ".search-results", ".typeahead", "[role='listbox']"
+        ]
+        
+        for selector in suggestion_selectors:
+            try:
+                WebDriverWait(driver, timeout//len(suggestion_selectors)).until(
+                    EC.visibility_of_element_located((By.CSS_SELECTOR, selector))
+                )
+                logger.info(f"✅ Suggestions appeared for {input_locator}")
+                return True
+            except TimeoutException:
+                continue
+        
+        logger.warning(f"⚠️ No suggestions found for {input_locator}")
+        return False
+        
+    except Exception as e:
+        logger.warning(f"⚠️ Error waiting for suggestions: {e}")
+        return False
+
+def wait_for_navigation(driver, expected_url_part=None, timeout=30):
+    """Wait for page navigation to complete"""
+    try:
+        if expected_url_part:
+            # Wait for URL to contain expected part
+            WebDriverWait(driver, timeout).until(
+                EC.url_contains(expected_url_part)
+            )
+            logger.info(f"✅ Navigated to page containing '{expected_url_part}'")
+        else:
+            # Just wait for any navigation (URL change)
+            current_url = driver.current_url
+            WebDriverWait(driver, timeout).until(
+                lambda d: d.current_url != current_url
+            )
+            logger.info(f"✅ Navigation completed to {driver.current_url}")
+        
+        # Wait for new page to load
+        wait_for_page_load(driver, timeout//2)
+        return True
+        
+    except TimeoutException:
+        logger.warning(f"⚠️ Navigation timeout after {timeout}s")
+        return False
+
+def wait_for_ajax_complete(driver, timeout=15):
+    """Wait for AJAX/XHR requests to complete"""
+    try:
+        # Wait for jQuery AJAX if jQuery is present
+        try:
+            WebDriverWait(driver, timeout).until(
+                lambda d: d.execute_script("return typeof jQuery !== 'undefined' ? jQuery.active === 0 : true")
+            )
+        except:
+            pass
+        
+        # Wait for Angular HTTP requests if Angular is present
+        try:
+            WebDriverWait(driver, timeout).until(
+                lambda d: d.execute_script("return typeof angular !== 'undefined' ? angular.element(document).injector().get('$http').pendingRequests.length === 0 : true")
+            )
+        except:
+            pass
+        
+        # Wait for fetch requests to complete (modern browsers)
+        try:
+            WebDriverWait(driver, timeout).until(
+                lambda d: d.execute_script("return window.performance.getEntriesByType('navigation')[0].loadEventEnd > 0")
+            )
+        except:
+            pass
+        
+        logger.info("✅ AJAX requests completed")
+        return True
+        
+    except TimeoutException:
+        logger.warning(f"⚠️ AJAX completion timeout after {timeout}s")
+        return False
+
+def wait_for_button_clickable(driver, button_locator, timeout=15):
+    """Wait for button to be clickable and not disabled"""
+    try:
+        # Wait for button to be present and visible
+        button = WebDriverWait(driver, timeout).until(
+            EC.visibility_of_element_located(button_locator)
+        )
+        
+        # Wait for button to be enabled (not disabled)
+        WebDriverWait(driver, timeout).until(
+            lambda d: not d.find_element(*button_locator).get_attribute("disabled")
+        )
+        
+        # Wait for button to be clickable
+        WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable(button_locator)
+        )
+        
+        logger.info(f"✅ Button {button_locator} is clickable")
+        return True
+        
+    except TimeoutException:
+        logger.warning(f"⚠️ Button {button_locator} not clickable within {timeout}s")
+        return False
+
+def smart_wait_and_click(driver, locator, description="element", timeout=15):
+    """Enhanced click function that waits for optimal conditions"""
+    try:
+        # Wait for overlays to disappear
+        wait_for_overlay_to_disappear(driver, 5)
+        
+        # Wait for element to be stable and clickable
+        wait_for_element_stable(driver, locator, timeout//2)
+        
+        # Wait for button to be clickable
+        element = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable(locator)
+        )
+        
+        # Scroll element into view
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+        
+        # Small stability wait
+        WebDriverWait(driver, 2).until(
+            lambda d: d.find_element(*locator).is_displayed()
+        )
+        
+        # Attempt click
+        element.click()
+        logger.info(f"✅ Successfully clicked {description}")
+        return True
+        
+    except TimeoutException:
+        logger.warning(f"⚠️ Smart click timeout for {description}, trying JavaScript click")
+        try:
+            element = driver.find_element(*locator)
+            driver.execute_script("arguments[0].click();", element)
+            logger.info(f"✅ JavaScript click successful for {description}")
+            return True
+        except Exception as e:
+            logger.error(f"❌ All click methods failed for {description}: {e}")
+            return False
+    except Exception as e:
+        logger.error(f"❌ Smart click failed for {description}: {e}")
+        return False
+
+def smart_wait_and_send_keys(driver, locator, text, description="field", timeout=15):
+    """Enhanced text input function that waits for optimal conditions"""
+    try:
+        # Wait for form to be ready
+        wait_for_form_ready(driver, timeout=timeout//2)
+        
+        # Wait for element to be present and interactable
+        element = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable(locator)
+        )
+        
+        # Clear and input text
+        element.clear()
+        element.send_keys(text)
+        
+        # Trigger events for frameworks
+        driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", element)
+        driver.execute_script("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", element)
+        
+        logger.info(f"✅ Successfully entered text in {description}")
+        return True
+        
+    except TimeoutException:
+        logger.warning(f"⚠️ Smart text input timeout for {description}")
+        return False
+    except Exception as e:
+        logger.error(f"❌ Smart text input failed for {description}: {e}")
+        return False
+
+# --- End of Advanced WebDriverWait Helper Functions ---
+
+def safe_dropdown_select(driver, dropdown_locator, option_text, description="dropdown", timeout=15):
+    """Safely select dropdown option with overlay protection and proper Select class usage"""
+    from selenium.webdriver.support.ui import Select
+    
+    try:
+        logger.info(f"🔽 Attempting to select '{option_text}' from {description}")
+        
+        # Step 1: Wait for any overlays to disappear
+        wait_for_overlay_to_disappear(driver, timeout=10)
+        
+        # Step 2: Wait for dropdown to be present and clickable
+        if isinstance(dropdown_locator, str):
+            # If it's an XPath string, convert to tuple
+            locator = (By.XPATH, dropdown_locator)
+        else:
+            locator = dropdown_locator
+            
+        dropdown_element = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable(locator)
+        )
+        
+        # Step 3: Scroll into view
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", dropdown_element)
+        
+        # Step 4: Wait for element to be stable
+        wait_for_element_stable(driver, locator, timeout=5)
+        
+        # Step 5: Use Select class for proper dropdown handling
+        select = Select(dropdown_element)
+        
+        # Try to select by visible text
+        try:
+            select.select_by_visible_text(option_text)
+            logger.info(f"✅ Successfully selected '{option_text}' from {description}")
+            return True
+            
+        except NoSuchElementException:
+            # If exact text doesn't work, try partial match
+            logger.warning(f"⚠️ Exact text match failed, trying partial match for '{option_text}'")
+            options = select.options
+            for option in options:
+                if option_text.lower() in option.text.lower():
+                    option.click()
+                    logger.info(f"✅ Successfully selected '{option.text}' (partial match) from {description}")
+                    return True
+            
+            logger.error(f"❌ No option found containing '{option_text}' in {description}")
+            logger.info(f"Available options: {[opt.text for opt in options]}")
+            return False
+        
+    except TimeoutException:
+        logger.warning(f"⚠️ Dropdown {description} not ready, trying JavaScript approach")
+        try:
+            # Fallback: Try JavaScript approach
+            element = driver.find_element(*locator)
+            driver.execute_script("arguments[0].scrollIntoView(true);", element)
+            wait_for_ajax_complete(driver, 3)
+            
+            # Try clicking the dropdown first to open it
+            driver.execute_script("arguments[0].click();", element)
+            wait_for_ajax_complete(driver, 2)
+            
+            # Then try to find and click the option
+            option_xpath = f"//option[contains(text(), '{option_text}')]"
+            option_element = driver.find_element(By.XPATH, option_xpath)
+            driver.execute_script("arguments[0].click();", option_element)
+            
+            logger.info(f"✅ JavaScript fallback successful for {description}")
+            return True
+            
+        except Exception as js_error:
+            logger.error(f"❌ JavaScript fallback also failed for {description}: {js_error}")
+            return False
+            
+    except Exception as e:
+        logger.error(f"❌ Unexpected error selecting from {description}: {e}")
+        return False
 
 class AutomationHelper:
     def __init__(self, driver: WebDriver, logger: logging.Logger, default_timeout: int = 30, default_retries: int = 5):
